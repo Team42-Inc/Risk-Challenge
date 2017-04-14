@@ -28,6 +28,7 @@ class login implements ServiceProviderInterface
     public function register(Container $app)
     {
         $this->app = $app;
+        $app['login'] = $this;
     }
 
     public function checkLogin(Request $request){
@@ -51,8 +52,7 @@ class login implements ServiceProviderInterface
                 return false;
             }
 
-            //TODO get the data from database
-
+            // get the data from database
             $sql = 'SELECT user, passhash, otpkey FROM admins WHERE user = ? LIMIT 1;';
             $baseData = $this->app['dbs']['mysql_read']->fetchAll($sql, array( $login ) );
 
