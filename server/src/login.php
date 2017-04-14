@@ -99,6 +99,8 @@ class login implements ServiceProviderInterface
         $this->app['session']->invalidate(0);
         //set the error
         $this->app['login.error'] = "error login fail";
+        //antibrute force
+        sleep( 3 );
     }
 
     private function checkOtp( $otp,  $otpKey){
