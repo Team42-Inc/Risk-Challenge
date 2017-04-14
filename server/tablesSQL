@@ -1,0 +1,13 @@
+////////////////////////////////////
+
+tables admins :
+
+id (int) (primary)
+user (varchar) (key)
+passhash (varchar 64)
+last_connect (int)
+last_ip (int)
+otpkey (varchar 64)
+
+/////////////////////////////////////
+

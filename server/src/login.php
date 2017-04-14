@@ -9,6 +9,7 @@
 namespace oasix;
 
 
+use PHPGangsta\PHPGangsta_GoogleAuthenticator;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,10 +52,15 @@ class login implements ServiceProviderInterface
             }
 
             //TODO get the data from database
-            $base_login = "admin";
+
+            $sql = 'SELECT user, passhash, otpkey FROM admins WHERE user = ? LIMIT 1;';
+            $baseData = $this->app['dbs']['mysql_read']->fetchAll($sql, array( $login ) );
+
+
+            $base_login = $baseData['user']; //"admin";
             //adminadmin
-            $base_passHash = '$2y$10$KSCRpE.Yh/H1xuAdtLS2KuEB5GHSMUOPnrT1K9IkBVwzTcWC2GUbm';
-            $base_otpKey = "";
+            $base_passHash = $baseData['passhash']; // '$2y$10$KSCRpE.Yh/H1xuAdtLS2KuEB5GHSMUOPnrT1K9IkBVwzTcWC2GUbm';
+            $base_otpKey = $baseData['otpkey'];
 
             if( $base_login === $login && password_verify($password,$base_passHash) ){
                 //check otp
@@ -73,12 +79,15 @@ class login implements ServiceProviderInterface
         //stock in session userid, clientip
         if( !$this->app['session']->start() )
             return false;
+        $time = time();
+        $ip = $request->getClientIp();
         $this->app['session']->set('user', array(
             'login' => $login,
-            'connect_ip' => $request->getClientIp(),
-            'connect_time' => time()
+            'connect_ip' =>  $ip,
+            'connect_time' => $time
         ));
-
+        $sql = "UPDATE admins SET last_connect = ?, last_ip = ? WHERE user = ? ";
+        $this->app['dbs']['mysql_write']->executeUpdate( (int)$time,  $ip, $login  );
 
         $this->app['login.username'] = $login;
         return true;
@@ -104,14 +113,18 @@ class login implements ServiceProviderInterface
         sleep( 3 );
     }
 
-    private function checkOtp( $otp,  $otpKey){
-        if( strlen($otp) != 6 )
+    private function checkOtp( $otp,  $otpKey)
+    {
+        if (strlen($otp) != 6)
             return false;
-        //TODO get otp service and check +- 4minutes code
+        //get otp service
+        $googleAuth = new PHPGangsta_GoogleAuthenticator();
 
-        //HACK
-        if( substr($otp, 4) == '42' )
+        // check +- 4minutes code
+        if( $googleAuth->verifyCode($otpKey, $otp, 8 ) )
             return true;
+
+        return false;
     }
 
     private function validateLoginFormat($login){
