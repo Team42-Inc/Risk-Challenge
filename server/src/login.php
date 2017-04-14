@@ -52,7 +52,8 @@ class login implements ServiceProviderInterface
 
             //TODO get the data from database
             $base_login = "admin";
-            $base_passHash = '$2y$10$jXZOM.FW2J29MLjFforL6O0DCP5fZcWR13RJqfmgfC.wV4Q2dbSrK';
+            //adminadmin
+            $base_passHash = '$2y$10$KSCRpE.Yh/H1xuAdtLS2KuEB5GHSMUOPnrT1K9IkBVwzTcWC2GUbm';
             $base_otpKey = "";
 
             if( $base_login === $login && password_verify($password,$base_passHash) ){

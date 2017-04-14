@@ -16,9 +16,32 @@ use Symfony\Component\HttpFoundation\Response;
 $app = new Silex\Application();
 // Provider
 $app->register(new Silex\Provider\SessionServiceProvider());
+
+$app->register(new Silex\Provider\DoctrineServiceProvider(), array(
+    'dbs.options' => array (
+        'mysql_read' => array(
+            'driver'    => 'pdo_mysql',
+            'host'      => 'mysql_read.someplace.tld',
+            'dbname'    => 'my_database',
+            'user'      => 'my_username',
+            'password'  => 'my_password',
+            'charset'   => 'utf8mb4',
+        ),
+        'mysql_write' => array(
+            'driver'    => 'pdo_mysql',
+            'host'      => 'mysql_write.someplace.tld',
+            'dbname'    => 'my_database',
+            'user'      => 'my_username',
+            'password'  => 'my_password',
+            'charset'   => 'utf8mb4',
+        ),
+    ),
+));
+
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/views',
 ));
+
 $app->register(new \oasix\login());
 
 
