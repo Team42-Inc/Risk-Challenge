@@ -99,4 +99,12 @@ $app->get('/logout', function () {
     return "";
 });
 
+$app->post('/register/agent', function (Request $request) use ($app) {
+    $agent = json_decode($request->get('paylod'));
+
+    // @todo: inject data in database
+
+    return new Response('Agent registered successfully!', 201);
+});
+
 $app->run();
