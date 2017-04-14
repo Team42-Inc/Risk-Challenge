@@ -9,12 +9,19 @@
 // web/index.php
 require_once __DIR__.'/../vendor/autoload.php';
 
+// Declaration on app
 $app = new Silex\Application();
+// Provider
+$app->register(new Silex\Provider\TwigServiceProvider(), array(
+    'twig.path' => __DIR__.'/views',
+));
 
-$app->get('/login', function () {
+$app->get('/login', function () use ($app) {
     // ...
 
-    return "Hello World";
+    return $app['twig']->render('login.twig', array(
+        'name' => '',
+    ));
 });
 
 $app->get('/dashboard', function () {
