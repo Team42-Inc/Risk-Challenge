@@ -9,8 +9,13 @@
 // web/index.php
 require_once __DIR__.'/../vendor/autoload.php';
 
+// HTTP
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+// Form
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 // Declaration on app
 $app = new Silex\Application();
@@ -69,34 +74,50 @@ $app->post('/login', function(Request $request) use ($app){
     ));
 });
 
-$app->get('/dashboard', function () {
+$app->get('/dashboard', function () use ($app) {
     // ...
 
-    return "";
+    return $app['twig']->render('dashboard.twig', array(
+        'error' => '',
+    ));
 });
 
-$app->get('/agent/{id}', function ($id) {
+$app->get('/agent/{id}', function ($id) use ($app) {
     // ...
 
-    return "";
+    return $app['twig']->render('agent.twig', array(
+        'error' => '',
+    ));
 });
 
-$app->get('/user/profile', function () {
+$app->get('/user/profile', function () use ($app) {
     // ...
 
-    return "";
+    return $app['twig']->render('user.twig', array(
+        'error' => '',
+    ));
 });
 
-$app->get('/server/profile', function () {
+$app->get('/server/profile', function () use ($app) {
     // ...
 
-    return "";
+    return $app['twig']->render('server.twig', array(
+        'error' => '',
+    ));
 });
 
 $app->get('/logout', function () {
     // ...
 
     return "";
+});
+
+$app->post('/register/agent', function (Request $request) use ($app) {
+    $agent = json_decode($request->get('paylod'));
+
+    // @todo: inject data in database
+
+    return new Response('Agent registered successfully!', 201);
 });
 
 $app->run();
