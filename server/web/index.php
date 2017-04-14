@@ -113,11 +113,39 @@ $app->get('/logout', function () {
 });
 
 $app->post('/register/agent', function (Request $request) use ($app) {
-    $agent = json_decode($request->get('paylod'));
+    /* post data are
+     *      payload : the data in json
+     *      r : a alphanum random string len > 10
+     *      a : agent user
+     *      s : the signature of post data sha1( [A] + ".|oasix|." + [PAYLOAD] + ".|oasix|." + [R] + ".|oasix|." + [PRIVATEKEY] )
+    */
 
-    // @todo: inject data in database
+    // do a check auth like signing data
+    $payload = $request->get('payload', '');
+    $randomString = $request->get('r','');
+    $agentid = $request->get('a','');
+    $signConfirmation = $request->get('s','');
 
-    return new Response('Agent registered successfully!', 201);
+
+
+
+    if( strlen($payload) > 10 && strlen($randomString) > 10 && strlen($signConfirmation) > 10 && strlen($agentid) > 6 ) {
+
+        //TODO: get in base the unique agent private key
+        $private_key = "0@six@g€ntS€cr€t";
+        //calculate the sign to compare
+        $sign = sha1($agentid . '.|oasix|.' . $payload . '.|oasix|.' . $randomString . '.|oasix|.' . $private_key);
+        if ($sign === $request->get('s', '')) {
+            //authentified
+            $agent = json_decode($payload);
+
+            // @todo: inject data in database
+
+            return new Response('Agent registered successfully!', 201);
+        }
+    }
+    sleep(3);
+    return new Response('Agent registered fail!', 403);
 });
 
 $app->run();
