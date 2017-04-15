@@ -56,11 +56,12 @@ class login implements ServiceProviderInterface
             $sql = 'SELECT user, passhash, otpkey FROM admins WHERE user = ? LIMIT 1;';
             $baseData = $this->app['dbs']['mysql_read']->fetchAll($sql, array( $login ) );
 
+          //  var_dump($baseData);
 
-            $base_login = $baseData['user']; //"admin";
+            $base_login = $baseData[0]['user']; //"admin";
             //adminadmin
-            $base_passHash = $baseData['passhash']; // '$2y$10$KSCRpE.Yh/H1xuAdtLS2KuEB5GHSMUOPnrT1K9IkBVwzTcWC2GUbm';
-            $base_otpKey = $baseData['otpkey'];
+            $base_passHash = $baseData[0]['passhash']; // '$2y$10$KSCRpE.Yh/H1xuAdtLS2KuEB5GHSMUOPnrT1K9IkBVwzTcWC2GUbm';
+            $base_otpKey = $baseData[0]['otpkey'];
 
             if( $base_login === $login && password_verify($password,$base_passHash) ){
                 //check otp
@@ -87,7 +88,7 @@ class login implements ServiceProviderInterface
             'connect_time' => $time
         ));
         $sql = "UPDATE admins SET last_connect = ?, last_ip = ? WHERE user = ? ";
-        $this->app['dbs']['mysql_write']->executeUpdate( (int)$time,  $ip, $login  );
+        $this->app['dbs']['mysql_write']->executeUpdate( $sql, array((int)$time,  $ip, $login ) );
 
         $this->app['login.username'] = $login;
         return true;

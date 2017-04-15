@@ -20,6 +20,7 @@ require_once __DIR__.'/../src/model/HostDetail.php';
 // HTTP
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Cookie;
 // Form
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -41,7 +42,7 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     'dbs.options' => array (
         'mysql_read' => array(
             'driver'    => 'pdo_mysql',
-            'host'      => 'oasixdb.ctjmjqlns8jn.eu-west-1.rds.amazonaws.com:3306',
+            'host'      => 'oasixdb.ctjmjqlns8jn.eu-west-1.rds.amazonaws.com',
             'dbname'    => 'oasixdb',
             'user'      => 'masteroasixdb',
             'password'  => 'JeENP2uO6F8zEmrmYbbZ',
@@ -49,7 +50,7 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
         ),
         'mysql_write' => array(
             'driver'    => 'pdo_mysql',
-            'host'      => 'oasixdb.ctjmjqlns8jn.eu-west-1.rds.amazonaws.com:3306',
+            'host'      => 'oasixdb.ctjmjqlns8jn.eu-west-1.rds.amazonaws.com',
             'dbname'    => 'oasixdb',
             'user'      => 'masteroasixdb',
             'password'  => 'JeENP2uO6F8zEmrmYbbZ',
@@ -63,6 +64,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 ));
 
 $app->register(new login());
+$app->register(new dashboard(), array('dashboard.urlDashBoard' => 'http://10.0.2.57:8080/servers/state'));
 
 
 
@@ -77,6 +79,7 @@ $app->get('/login', function (Request $request) use ($app) {
 
 $app->post('/login', function(Request $request) use ($app){
     if( $app['login']->checkLogin( $request  ) ){
+
         //succes
         $cookie = new Cookie("lastusername", $app['login.username'] );
         $response = $app->redirect('/dashboard');
@@ -90,18 +93,25 @@ $app->post('/login', function(Request $request) use ($app){
     ));
 });
 
-$app->get('/dashboard', function () use ($app) {
+$app->get('/dashboard', function (Request $request) use ($app) {
     $app['dashboard']->run();
 
-
-
+    $app['admins.listCurrentAdmin'] = array( array(
+        "user" => "default",
+        "ip"   => $request->getClientIp(),
+        "country" => "MU"
+    )
+    );
+    var_dump($app['dashboard.agents']);
     return $app['twig']->render('dashboard.twig', array(
         'hosts' => $app['dashboard.agents'],
+        'admins' => $app['admins.listCurrentAdmin']
     ));
 });
 
 $app->get('/agent/{id}', function ($id) use ($app) {
     // ...
+
 
     return $app['twig']->render('agent.twig', array(
         'error' => '',
@@ -110,6 +120,12 @@ $app->get('/agent/{id}', function ($id) use ($app) {
 
 $app->get('/user/profile', function () use ($app) {
     // ...
+    $app['admins.listCurrentAdmin'] = array( array(
+        "user" => "default",
+        "ip"   => $request->getClientIp(),
+        "country" => "MU"
+    )
+    );
 
     return $app['twig']->render('user.twig', array(
         'error' => '',
