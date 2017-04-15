@@ -6,6 +6,6 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchCrudReposi
 
 import oasix.middleware.model.Command;
 
-public interface CommandRepository extends ElasticsearchCrudRepository<Command, Long> {
+public interface CommandRepository extends ElasticsearchCrudRepository<Command, String> {
 	List<Command> findByHost(String host);
 }
