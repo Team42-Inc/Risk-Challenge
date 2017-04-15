@@ -95,6 +95,8 @@ $app->post('/login', function(Request $request) use ($app){
     return $app['twig']->render('login.twig', array(
         'last_username' => $request->cookies->get('lastusername'),
         'error' => $app['login.error'],
+        'admins' => array(),
+        'page_name' => 'Connexion',
     ));
 });
 
@@ -116,7 +118,7 @@ $app->get('/dashboard', function (Request $request) use ($app) {
         'page_name' => 'Dashboard',
         'username' => $app['session']->get('user')['username'],
     ));
-});
+})->bind('dashboard');
 
 $app->get('/agent/{id}', function ($id) use ($app) {
     // ...
@@ -154,7 +156,12 @@ $app->get('/agent/{id}', function ($id) use ($app) {
         'char_options' => array(
             'title'     => 'Safety Rates',
             'curveType' => 'function',
-            'legend' => array( 'position' => 'bottom' )
+            'legend' => array( 'position' => 'bottom' ),
+            'vAxis' => array(
+                'minValue' => 0 ,
+                'maxValue' => 100,
+                'viewWindow' => array( 'min' => 0, 'max'=>100)
+            ),
         ),
         'char_type' => 'line'
     );

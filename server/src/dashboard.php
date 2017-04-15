@@ -48,7 +48,7 @@ class dashboard implements ServiceProviderInterface
 
     private function parseHost($index, $content ){
         $data = @json_decode($content);
-        $this->app['dashboard.agents'][$index] = \HostDetail::fromJSON($data);
+        $this->app['dashboard.agents'][$index] = HostDetail::fromJSON($data);
     }
 
     private function getAgentList(){

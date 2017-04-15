@@ -1,12 +1,13 @@
 <style>
     .chart{
-        
+
     }
 </style>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
     google.charts.load('current', {'packages':['corechart','geochart']});
     var datas = {{ dataraw|raw }};
+    var refChart = {};
     google.charts.setOnLoadCallback(draw);
     function draw() {
         var nbChar = datas.length;
@@ -18,15 +19,20 @@
                 myGraph.char_datas
             );
             var options = myGraph.char_options;
-            container.innerHTML += '<div id="chart_'+myGraph.char_name+'"></div>';
+            container.innerHTML += '<div id="chart_'+myGraph.char_name+'" class=""></div>';
             var item = document.getElementById('chart_'+myGraph.char_name);
+            var chart;
             switch ( myGraph.char_type ){
                 case 'line':
-                    (new google.visualization.LineChart(item)).draw(data,options);
+                    chart = new google.visualization.LineChart(item);
                     break;
                 case 'geochart':
-                    (new google.visualization.GeoChart(item)).draw(data,options);
+                    chart = new google.visualization.GeoChart(item);
                     break;
+            }
+            if( chart ) {
+                refChart[myGraph.char_name] = chart;
+                chart.draw(data, options);
             }
         }
         return;
