@@ -68,7 +68,10 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 $app->register(new login());
 $app->register(new dashboard(), array('dashboard.urlDashBoard' => 'http://10.0.2.57:8080/servers/state'));
 $app->register(new user());
-$app->register(new agent(), array('agent.urlConnexionsHistory' => 'http://10.0.2.57:8080/servers/history'));
+$app->register(new agent(), array(
+    'agent.urlConnexionsHistory' => 'http://10.0.2.57:8080/servers/history',
+    'agent.urlRateHistory' => 'http://10.0.2.57:8080/servers/metrics/rates'
+));
 
 
 $app->get('/login', function (Request $request) use ($app) {
@@ -120,19 +123,26 @@ $app->get('/dashboard', function (Request $request) use ($app) {
     ));
 })->bind('dashboard');
 
-$app->get('/agent/{id}', function ($id) use ($app) {
+$app->get('/agent-{id}', function (Request $request, $id) use ($app) {
     // ...
     $app['agent'] -> getConnexions( $id );
     $app['agent'] -> getRates( $id );
 
 
+    $app['admins.listCurrentAdmin'] = array( array(
+        "user" => "default",
+        "ip"   => $request->getClientIp(),
+        "country" => "MU"
+    )
+    );
+
     $dataConnexionPort = array(
         'char_name' => 'connexions',
         'char_datas' => $app['agent.connexions.graph.port']['datas'],
         'char_options' => array(
-            'title'     => 'connexions',
+            'title'     => 'Connexions',
             'curveType' => 'function',
-            'legend' => array( 'position' => 'bottom' )
+            'legend'    => array( 'position' => 'bottom' )
         ),
         'char_type' => 'line'
     );
@@ -175,7 +185,10 @@ $app->get('/agent/{id}', function ($id) use ($app) {
                 $dataSuspiciousPays
             )
         ),
-        'error' => ''
+        'error' => '',
+        'page_name' => 'Agent Details : '.$id,
+        'username' => $app['session']->get('user')['username'],
+        'admins' => $app['admins.listCurrentAdmin']
     ));
 });
 

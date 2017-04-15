@@ -44,7 +44,7 @@ class agent implements ServiceProviderInterface
         $datastr = $req->getContent();
         if( !isset($datastr)  || strlen($datastr) < 128 )
             $datastr = file_get_contents(__DIR__.'/../tmpData/http___10_0_2_57_8080_servers_metrics_connections_host_www_govmu_org');
-        $data = json_decode($datastr);
+        $data = @json_decode($datastr);
         $this->app['agent.connexions'] = Connexion::fromJSONList($data->content);
 
         $this->preParseConnexion();
@@ -54,13 +54,13 @@ class agent implements ServiceProviderInterface
     public function getRates( $id ){
 
         $req = new Request();
-        $req->create($this->app['agent.urlConnexionsHistory'], 'GET', array("host"=>$id));
+        $req->create($this->app['agent.urlRateHistory'], 'GET', array("host"=>$id));
 
         $datastr = $req->getContent();
         if( !isset($datastr) || strlen($datastr) < 128)
             $datastr = file_get_contents(__DIR__.'/../tmpData/metric_rates');
 
-        $data = json_decode($datastr);
+        $data = @json_decode($datastr);
         $this->app['agent.rates'] =  Rate::fromJSONList( $data );
 
 
