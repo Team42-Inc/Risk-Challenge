@@ -11,7 +11,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-@Document(indexName="oasix-connections", type="connection")
+@Document(indexName="oasix-connection")
 public class ConnectionStats {
 	@Id
 	private String id;
@@ -56,6 +56,14 @@ public class ConnectionStats {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+	
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
 	}
 
 	public Date getTimestamp() {

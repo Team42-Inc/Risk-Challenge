@@ -8,17 +8,18 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import oasix.middleware.model.Command;
 import oasix.middleware.model.ConnectionStats;
+import oasix.middleware.model.RateStats;
 import oasix.middleware.model.ServerState;
 import oasix.middleware.model.VulnerabilityStats;
 import oasix.middleware.repository.CommandRepository;
 import oasix.middleware.repository.ConnectionStatsRepository;
+import oasix.middleware.repository.RateStatsRepository;
 import oasix.middleware.repository.ServerStateRepository;
 import oasix.middleware.repository.VulnerabilityStatsRepository;
 import oasix.middleware.service.AnalysisService;
@@ -37,6 +38,9 @@ public class ServerStateController {
 	
 	@Autowired
 	VulnerabilityStatsRepository vulnerabilityStatsRepository;
+	
+	@Autowired
+	RateStatsRepository rateStatsRepository;
 	
 	@Autowired
 	CommandRepository commandRepository;
@@ -89,9 +93,14 @@ public class ServerStateController {
 		vulnerabilityStatsRepository.delete(stats);
 	}
 	
+	@GetMapping("/metrics/rates")
+	public Iterable<RateStats> getRates(@RequestParam String host){
+		return rateStatsRepository.findByHost(host);
+	}
+	
 	@GetMapping("/commands")
 	public Iterable<Command> getCommandHistory(@RequestParam String host){
-		return commandRepository.findByHost(host);
+		return commandRepository.findAll();
 	}
 	
 	@GetMapping("/analyse")

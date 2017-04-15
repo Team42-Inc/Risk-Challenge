@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import oasix.middleware.model.Connection;
 import oasix.middleware.model.Port;
 import oasix.middleware.model.RequiredUpdate;
 import oasix.middleware.model.ServerState;
@@ -28,8 +27,13 @@ public class AnalysisService {
 	@Autowired
 	VulnerabilityStatsService vulnerabilityStatsService;
 	
+	@Autowired
+	RateStatsService rateStatsService;
+	
 	@Async
 	public void analyse(String host, Date analysisTime){
+		rateStatsService.aggregate(host);
+		
 		ServerState serverState = createServerState(analysisTime, host);
 		serverStateRepository.save(serverState);
 	}

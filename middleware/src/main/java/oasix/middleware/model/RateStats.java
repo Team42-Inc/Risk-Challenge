@@ -11,32 +11,30 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-@Document(indexName="oasix-command", type="command")
-public class Command {
+@Document(indexName="oasix-rates")
+public class RateStats {
 	@Id
 	private String id;
 	
-	private String host;
+	public String host;
 	
 	@Field( type = FieldType.Date, format = DateFormat.custom, pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date timestamp;
 	
-	private String user;
+	private String rate;
 	
-	private String command;
 	
-	public Command(){
+	public RateStats(){
 	}
 	
-	public Command(String host, Date timestamp, String user, String command){
+	public RateStats(String host, Date timestamp, String rate){
 		this.host = host;
-		this.timestamp=timestamp;
-		this.user=user;
-		this.command=command;
+		this.timestamp = timestamp;
+		this.rate=rate;
 		
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss");
-		id = host + "-" + df.format(timestamp)+ "-" + "user" + "-" + command;
+		this.id = host + "-" + df.format(timestamp);
 	}
 
 	public String getId() {
@@ -63,19 +61,13 @@ public class Command {
 		this.timestamp = timestamp;
 	}
 
-	public String getUser() {
-		return user;
+	public String getRate() {
+		return rate;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
+	public void setRate(String rate) {
+		this.rate = rate;
 	}
 
-	public String getCommand() {
-		return command;
-	}
-
-	public void setCommand(String command) {
-		this.command = command;
-	}
+	
 }

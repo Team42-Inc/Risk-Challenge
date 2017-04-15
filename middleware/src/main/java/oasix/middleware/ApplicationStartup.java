@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import oasix.middleware.service.AnalysisService;
 import oasix.middleware.service.Commandservice;
 import oasix.middleware.service.ConnectionStatsService;
+import oasix.middleware.service.LogAnalysisService;
 
 @Component
 public class ApplicationStartup implements ApplicationListener<ApplicationReadyEvent> {
@@ -23,6 +24,9 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 
 	@Autowired
 	AnalysisService aggregationService;
+	
+	@Autowired
+	LogAnalysisService sshConnectionStatsService;
 	
 	@Autowired
 	ConnectionStatsService connectionStatsService;
@@ -37,15 +41,25 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 	@Override
 	public void onApplicationEvent(final ApplicationReadyEvent event) {
 		log.info("Application startup");
+		
+		sshConnectionStatsService.analyse();
+		
+		log.info("Cleaning up");
 		aggregationService.cleanup();
 		connectionStatsService.cleanup();
 		
+		log.info("Generating data");
 		List<String> servers = new  ArrayList<>();
-		servers.add("www.govmu.org");
-		servers.add("ta.gov-mu.org");
-		servers.add("www.mra.mu");
+		servers.add("202.123.27.113"); //www.govmu.org
+		servers.add("202.123.27.113"); //ta.gov-mu.org
+		servers.add("196.27.64.122"); //www.mra.mu
+		servers.add("10.0.2.85");
 		
 		for(String server : servers){
+			log.info("Analysing " + server);
+			aggregationService.analyse(server, new Date());
+			
+			log.info("Generating connection stats " + server);
 			Date dt = new Date();
 			for(int i = 0; i < 360; i++){
 				Calendar c = Calendar.getInstance(); 
@@ -55,11 +69,10 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 				
 				connectionStatsService.analyse(server, new Date());
 			}
-			aggregationService.analyse(server, new Date());
+			
+			commandService.aggregate(server);
 		}
 		
-		
-		commandService.aggregate("gov");
 	}
 
 }
