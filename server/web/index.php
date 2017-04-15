@@ -73,7 +73,8 @@ $app->get('/login', function (Request $request) use ($app) {
 
     return $app['twig']->render('login.twig', array(
         'last_username' => $request->cookies->get('lastusername'),
-        'error' => ''
+        'error' => '',
+        'admins' => array(),
     ));
 })->bind('login');
 

@@ -1,0 +1,28 @@
+{% include 'header.twig' %}
+<div class="wrapper">
+    <header class="main-header">
+        <a href="index2.html" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>O</b>X</span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>O</b>asiX</span>
+        </a>
+        <nav class="navbar navbar-static-top">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+            <div class="navbar-custom-menu">
+                <!-- @todo: faire menu une fois logué -->
+            </div>
+        </nav>
+    </header>
+    <aside class="main-sidebar">
+        <section class="sidebar">
+
+        </section>
+    </aside>
+    <div class="content-wrapper">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+{% include 'footer.twig' %}
