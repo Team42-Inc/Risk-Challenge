@@ -29,7 +29,13 @@
         </div>
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
-            <div class="small-box bg-green">
+            {% if global_security > 95  %}
+                 <div class="small-box bg-green">
+            {% elseif global_security > 80  %}
+                 <div class="small-box bg-yellow">
+            {% else  %}
+                 <div class="small-box bg-red">
+            {% endif  %}
                 <div class="inner">
                     <h3>{{ global_security }}<sup style="font-size: 20px">%</sup></h3>
 
@@ -42,7 +48,13 @@
         </div>
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
+            {% if package_to_update < 5  %}
+            <div class="small-box bg-green">
+            {% elseif package_to_update < 20  %}
             <div class="small-box bg-yellow">
+            {% else  %}
+            <div class="small-box bg-red">
+            {% endif  %}
                 <div class="inner">
                     <h3>{{ package_to_update }}</h3>
 
@@ -56,7 +68,13 @@
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
+            {% if nb_vulnerabilities == 0  %}
+            <div class="small-box bg-green">
+            {% elseif nb_vulnerabilities <= 4  %}
+            <div class="small-box bg-yellow">
+            {% else %}
             <div class="small-box bg-red">
+            {% endif  %}
                 <div class="inner">
                     <h3>{{ nb_vulnerabilities }}</h3>
 
@@ -72,12 +90,6 @@
     <div class="box box-info">
         <div class="box-header with-border">
             <h3 class="box-title">Installed agents</h3>
-
-            <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-            </div>
         </div>
         <!-- /.box-header -->
         <div class="box-body">

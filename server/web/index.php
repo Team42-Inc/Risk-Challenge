@@ -120,9 +120,9 @@ $app->get('/dashboard', function (Request $request) use ($app) {
         'admins' => isset($app['admins.listCurrentAdmin']) ? $app['admins.listCurrentAdmin'] : array(),
         'page_name' => 'Dashboard',
         'username' => $app['session']->get('user')['username'],
-        'nb_vulnerabilities' => 0,
-        'package_to_update' => 0,
-        'global_security' => 0,
+        'nb_vulnerabilities' => 2,
+        'package_to_update' => 3,
+        'global_security' => 87,
 
     ));
 })->bind('dashboard');
@@ -196,7 +196,7 @@ $app->get('/agent-{id}', function (Request $request, $id) use ($app) {
     ));
 })->bind('agent');
 
-$app->get('/user/profile', function (Request $request) use ($app) {
+$app->get('/user-profile', function (Request $request) use ($app) {
     // ...
     $app['admins.listCurrentAdmin'] = array( array(
         "user" => "default",
@@ -212,7 +212,7 @@ $app->get('/user/profile', function (Request $request) use ($app) {
 });
 
 
-$app->get('/user/add', function (Request $request) use ($app) {
+$app->get('/user-add', function (Request $request) use ($app) {
     // ...
     $app['admins.listCurrentAdmin'] = array( array(
         "user" => "default",
@@ -229,9 +229,9 @@ $app->get('/user/add', function (Request $request) use ($app) {
         'warningDefaultUser' => $session_user=='default'?'yes':'',
         'page_name' => 'User > Add',
     ));
-})->bind('user/add');
+})->bind('user-add');
 
-$app->post('/user/add', function (Request $request) use ($app) {
+$app->post('/user-add', function (Request $request) use ($app) {
 
     $username = $request->get('_username');
     if( $app['user']->AddUser($request->get('_username') , $request->get('_password'), $request->get('_mail')  ) ){
