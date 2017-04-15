@@ -112,17 +112,33 @@ $app->get('/dashboard', function (Request $request) use ($app) {
         "country" => "MU"
     )
     );
+
+    $listHosts = isset($app['dashboard.agents']) ? $app['dashboard.agents'] : array();
+
+    //calculate global stats
+    $i=0;
+    $nb_vulnerabilities = 0;
+    $package_to_update = 0;
+    $global_security = 0;
+    foreach ($listHosts as $host ){
+        $nb_vulnerabilities += $host['vulnerabilities'];
+        $package_to_update += $host['updates'];
+        $global_security += $host['rate'];
+        $i++;
+    }
+    $global_security /= $i;
+
     /*
      * @todo: remettre la bonne valeur pour hosts
      */
     return $app['twig']->render('dashboard.twig', array(
-        'hosts' => isset($app['dashboard.agents']) ? $app['dashboard.agents'] : array(),
+        'hosts' => $listHosts,
         'admins' => isset($app['admins.listCurrentAdmin']) ? $app['admins.listCurrentAdmin'] : array(),
         'page_name' => 'Dashboard',
         'username' => $app['session']->get('user')['username'],
-        'nb_vulnerabilities' => 2,
-        'package_to_update' => 3,
-        'global_security' => 87,
+        'nb_vulnerabilities' => $nb_vulnerabilities,
+        'package_to_update' => $package_to_update,
+        'global_security' => floor($global_security),
 
     ));
 })->bind('dashboard');

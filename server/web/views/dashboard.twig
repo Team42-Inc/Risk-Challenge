@@ -91,7 +91,9 @@
                     <tr>
                         <th>Agent name</th>
                         <th>IP</th>
-                        <th>Status</th>
+                        <th>Vulnerabilities</th>
+                        <th>Updates</th>
+                        <th>Security</th>
                         <th>Trend</th>
                     </tr>
                     </thead>
@@ -101,13 +103,31 @@
                     <tr>
                         <td><a href="{{ path('agent', {'id': host.host}) }}">{{ host.agent }}</a></td>
                         <td>{{host.host}}</td>
-                            {% if host.rate > 90 %}
-                        <td><span class="label label-success">{{host.rate}} %</span></td>
-                            {% elseif host.rate > 70 %}
-                        <td><span class="label label-warning">{{host.rate}} %</span></td>
-                            {% else %}
-                        <td><span class="label label-danger">{{host.rate}} %</span></td>
-                            {% endif %}
+                        {% if host.vulnerabilities == 0 %}
+                            <td><span class="label label-success">{{host.vulnerabilities}}</span></td>
+                        {% elseif host.vulnerabilities <= 4 %}
+                            <td><span class="label label-warning">{{host.vulnerabilities}}</span></td>
+                        {% else %}
+                            <td><span class="label label-danger">{{host.vulnerabilities}}</span></td>
+                        {% endif %}
+
+
+                        {% if host.updates < 5 %}
+                            <td><span class="label label-success">{{host.updates}}</span></td>
+                        {% elseif host.updates < 20 %}
+                            <td><span class="label label-warning">{{host.updates}}</span></td>
+                        {% else %}
+                            <td><span class="label label-danger">{{host.updates}}</span></td>
+                        {% endif %}
+
+                        {% if host.rate > 90 %}
+                            <td><span class="label label-success">{{host.rate}} %</span></td>
+                        {% elseif host.rate > 70 %}
+                            <td><span class="label label-warning">{{host.rate}} %</span></td>
+                        {% else %}
+                            <td><span class="label label-danger">{{host.rate}} %</span></td>
+                        {% endif %}
+
                         <td>
                             {% if host.trend > 0 %}
                                 <span class="glyphicon glyphicon-arrow-up"></span>
