@@ -1,8 +1,18 @@
-<style>
-    .chart{
+{% extends "wrapper.twig" %}
 
-    }
-</style>
+{% block sidebarmenu %}
+    <div class="user-panel">
+        <div class="pull-left image">
+            <img src="./assets/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+        </div>
+        <div class="pull-left info">
+            <p>{{ username|default('Dark Vador') }}</p>
+            <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
     google.charts.load('current', {'packages':['corechart','geochart']});
@@ -19,7 +29,7 @@
                 myGraph.char_datas
             );
             var options = myGraph.char_options;
-            container.innerHTML += '<div id="chart_'+myGraph.char_name+'" class=""></div>';
+            container.innerHTML += '<div class="col-md-6 col-sm-12 col-xs-12"><div class="box"><div id="chart_'+myGraph.char_name+'"></div><div></div>';
             var item = document.getElementById('chart_'+myGraph.char_name);
             var chart;
             switch ( myGraph.char_type ){
@@ -38,4 +48,6 @@
         return;
     }
 </script>
-<div id="charts" class="chart"></div>
+<div id="charts" class="row"></div>
+
+{% endblock %}

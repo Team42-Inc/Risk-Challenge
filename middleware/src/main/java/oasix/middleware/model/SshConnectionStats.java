@@ -11,32 +11,33 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-@Document(indexName="oasix-command", type="command")
-public class Command {
+@Document(indexName="oasix-sshconnection")
+public class SshConnectionStats {
 	@Id
 	private String id;
-	
-	private String host;
 	
 	@Field( type = FieldType.Date, format = DateFormat.custom, pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date timestamp;
 	
+	private String host;
+	
 	private String user;
 	
 	private String command;
 	
-	public Command(){
+	
+	public SshConnectionStats(){
 	}
 	
-	public Command(String host, Date timestamp, String user, String command){
-		this.host = host;
-		this.timestamp=timestamp;
+	public SshConnectionStats(String host, Date timestamp, String user, String command){
+		this.timestamp = timestamp;
+		this.host=host;
 		this.user=user;
 		this.command=command;
 		
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss");
-		id = host + "-" + df.format(timestamp)+ "-" + "user" + "-" + command;
+		this.id = host + "-" + df.format(timestamp)+"-"+user+"-"+command;
 	}
 
 	public String getId() {
@@ -47,20 +48,20 @@ public class Command {
 		this.id = id;
 	}
 
-	public String getHost() {
-		return host;
-	}
-
-	public void setHost(String host) {
-		this.host = host;
-	}
-
 	public Date getTimestamp() {
 		return timestamp;
 	}
 
 	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
 	}
 
 	public String getUser() {
@@ -78,4 +79,6 @@ public class Command {
 	public void setCommand(String command) {
 		this.command = command;
 	}
+	
+	
 }

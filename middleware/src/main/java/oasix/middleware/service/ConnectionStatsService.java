@@ -15,9 +15,8 @@ public class ConnectionStatsService {
 	@Autowired
 	ConnectionStatsRepository connectionStatsRepository;
 	
-	public void aggregate(Date startTime){
+	public void analyse(String host, Date startTime){
 		List<ConnectionStats> stats = new ArrayList<>();
-		String host = "govmu.org";
 		stats.add(new ConnectionStats(host, new Date(), 12, "TCP" ,80, "232.22.33.12", "FRA", false));
 		stats.add(new ConnectionStats(host,new Date(), 12, "TCP" ,80, "232.22.3.12", "FRA", true));
 		stats.add(new ConnectionStats(host,new Date(), 12, "UDP", 22, "232.22.33.12", "FRA", false));
