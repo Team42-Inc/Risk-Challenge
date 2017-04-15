@@ -45,7 +45,14 @@ class dashboard implements ServiceProviderInterface
             $req->create($this->app['dashboard.urlDashBoard'], 'GET', array("host"=>$this->app['dashboard.agents'][$i]['host']));
             $this->parseHost($i, $req->getContent());
         }
+        $tmp = $this->app['dashboard.agents'];
+        usort( $tmp , function ($a , $b ){
+            return $a['rate'] - $b['rate'];
+        } );
+
+        $this->app['dashboard.agents'] = $tmp;
     }
+
 
     private function parseHost($index, $content ){
         $data = @json_decode($content);

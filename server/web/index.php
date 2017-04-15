@@ -120,6 +120,10 @@ $app->get('/dashboard', function (Request $request) use ($app) {
         'admins' => isset($app['admins.listCurrentAdmin']) ? $app['admins.listCurrentAdmin'] : array(),
         'page_name' => 'Dashboard',
         'username' => $app['session']->get('user')['username'],
+        'nb_vulnerabilities' => 0,
+        'package_to_update' => 0,
+        'global_security' => 0,
+
     ));
 })->bind('dashboard');
 
