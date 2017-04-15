@@ -12,6 +12,7 @@ namespace oasix;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
+use function Symfony\Component\HttpKernel\Tests\controller_func;
 
 class dashboard implements ServiceProviderInterface
 {
@@ -41,7 +42,7 @@ class dashboard implements ServiceProviderInterface
         $len = $this->app['dashboard.nb_agent'];
         for( $i = 0; $i < $len ; $i++ ){
             $req = new Request();
-            $req->create($this->url, 'GET', array("host"=>$this->app['dashboard.agents'][$i]['agentname']));
+            $req->create($this->url, 'GET', array("host"=>$this->app['dashboard.agents'][$i]['host']));
             $this->parseHost($i, $req->getContent());
         }
     }
@@ -53,24 +54,23 @@ class dashboard implements ServiceProviderInterface
 
     private function getAgentList(){
         //get the list of agents in database
-        $sql = "SELECT agentname FROM agents";
+        $sql = "SELECT hosts FROM agents";
         $data = $this->app['dbs']['mysql_read']->fetchAll($sql);
         if( isset( $data ) ) {
             $this->app['dashboard.agents'] = array();
-            //in case of only one agent
-            if (isset($data['agentname'])) {
-                $this->app['dashboard.nb_agent'] = 1;
-                $this->app['dashboard.agents'][0] = array(
-                    'agentname' => $data['agentname']
-                );
-                return true;
-            }elseif ( isset( $data[0]['agentname']) ){
+            if ( isset( $data[0]['hosts']) ){
                 $len = count( $data );
                 $this->app['dashboard.nb_agent'] = $len;
                 for($i = 0 ; $i < $len ; $i ++ ){
-                    $this->app['dashboard.agents'][$i] = array(
-                        'agentname' => $data[$i]['agentname']
-                    );
+                    $hosts = str_split( $data[$i]['hosts'], ',' );
+                    $len = count( $hosts );
+                    for( $j=0 ; $j<$len; $j++ ) {
+                        if( empty($hosts[$j]))
+                            continue;
+                        $this->app['dashboard.agents'][] = array(
+                            'host' => $hosts[$j]
+                        );
+                    }
                 }
                 return true;
             }
