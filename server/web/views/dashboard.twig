@@ -1,32 +1,34 @@
-{% include 'header.twig' with {'title': 'dashboard'} %}
+{% extends "wrapper.twig" %}
 
+{% block content %}
 <div class="container">
     <ul>
-    {%  for host in hosts %}
-        <li>
-        {% if host.rate > 90 %}
-            <button type="button" class="btn btn-success">
-        {% elseif host.rate > 70 %}
-            <button type="button" class="btn btn-warning">
-        {% else %}
-            <button type="button" class="btn btn-danger">
-        {% endif %}
-
-                <span>{{host.host}}</span>
-
-                {% if host.trend > 0 %}
-                    <span class="glyphicon glyphicon-arrow-up"></span>
-                {% elseif host.trend < 0 %}
-                    <span class="glyphicon glyphicon-arrow-down"></span>
+        {% if hosts %}
+            {%  for host in hosts %}
+                <li>
+                {% if host.rate > 90 %}
+                    <button type="button" class="btn btn-success">
+                {% elseif host.rate > 70 %}
+                    <button type="button" class="btn btn-warning">
                 {% else %}
-                    <span class="glyphicon glyphicon-arrow-right"></span>
+                    <button type="button" class="btn btn-danger">
                 {% endif %}
 
-                <span>{{ host.rate }} %</span>
-            </button>
-        </li>
-    {% endfor %}
+                        <span>{{host.host}}</span>
+
+                        {% if host.trend > 0 %}
+                            <span class="glyphicon glyphicon-arrow-up"></span>
+                        {% elseif host.trend < 0 %}
+                            <span class="glyphicon glyphicon-arrow-down"></span>
+                        {% else %}
+                            <span class="glyphicon glyphicon-arrow-right"></span>
+                        {% endif %}
+
+                        <span>{{ host.rate }} %</span>
+                    </button>
+                </li>
+            {% endfor %}
+        {% endif %}
     </ul>
 </div>
-
-{% include 'footer.twig' %}
+{% endblock %}
