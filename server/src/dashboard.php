@@ -38,19 +38,17 @@ class dashboard implements ServiceProviderInterface
             $this->app['dashboard.error'] = "fail to get agent list";
             return false;
         }
-        echo ("url ".$this->app['dashboard.urlDashBoard']);
         $len = $this->app['dashboard.nb_agent'];
         for( $i = 0; $i < $len ; $i++ ){
             $req = new Request();
             $req->create($this->app['dashboard.urlDashBoard'], 'GET', array("host"=>$this->app['dashboard.agents'][$i]['host']));
-            echo( "content : " . $req->getContent() );
             $this->parseHost($i, $req->getContent());
         }
     }
 
     private function parseHost($index, $content ){
         $data = @json_decode($content);
-        $this->app['dashboard.agents'][$index] = \HostDetail::fromJSON($data);
+        $this->app['dashboard.agents'][$index] = HostDetail::fromJSON($data);
     }
 
     private function getAgentList(){
