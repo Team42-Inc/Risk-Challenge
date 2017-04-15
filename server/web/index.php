@@ -105,9 +105,12 @@ $app->get('/dashboard', function (Request $request) use ($app) {
         "country" => "MU"
     )
     );
+    /*
+     * @todo: remettre la bonne valeur pour hosts
+     */
     return $app['twig']->render('dashboard.twig', array(
-        'hosts' => $app['dashboard.agents'],
-        'admins' => $app['admins.listCurrentAdmin']
+        'hosts' => isset($app['dashboard.agents']) ? array() : array(),
+        'admins' => isset($app['admins.listCurrentAdmin']) ? $app['admins.listCurrentAdmin'] : array()
     ));
 });
 
