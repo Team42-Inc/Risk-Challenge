@@ -128,7 +128,8 @@ $app->get('/dashboard', function (Request $request) use ($app) {
 })->bind('dashboard');
 
 $app->get('/agent-{id}', function (Request $request, $id) use ($app) {
-    // ...
+    $app['dashboard']->run();
+
     $app['agent'] -> getConnexions( $id );
     $app['agent'] -> getRates( $id );
 
@@ -192,7 +193,8 @@ $app->get('/agent-{id}', function (Request $request, $id) use ($app) {
         'error' => '',
         'page_name' => 'Agent Details : '.$id,
         'username' => $app['session']->get('user')['username'],
-        'admins' => $app['admins.listCurrentAdmin']
+        'admins' => $app['admins.listCurrentAdmin'],
+        'hosts' => isset($app['dashboard.agents']) ? $app['dashboard.agents'] : array(),
     ));
 })->bind('agent');
 
