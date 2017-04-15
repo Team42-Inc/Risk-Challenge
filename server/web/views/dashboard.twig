@@ -95,7 +95,7 @@
                     {% if hosts %}
                         {%  for host in hosts %}
                     <tr>
-                        <td><a href="pages/examples/invoice.html">{{ host.host }}</a></td>
+                        <td><a href="{{ path('agent', {'id': host.host}) }}">{{ host.agent }}</a></td>
                         <td>{{host.host}}</td>
                             {% if host.rate > 90 %}
                         <td><span class="label label-success">{{host.rate}} %</span></td>

@@ -190,7 +190,7 @@ $app->get('/agent-{id}', function (Request $request, $id) use ($app) {
         'username' => $app['session']->get('user')['username'],
         'admins' => $app['admins.listCurrentAdmin']
     ));
-});
+})->bind('agent');
 
 $app->get('/user/profile', function (Request $request) use ($app) {
     // ...
