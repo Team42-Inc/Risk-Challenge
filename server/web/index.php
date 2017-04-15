@@ -10,6 +10,13 @@
 require_once __DIR__.'/../vendor/autoload.php';
 //$loader->add('oasix', __DIR__.'/../src');
 
+require_once __DIR__.'/../src/agent.php';
+require_once __DIR__.'/../src/login.php';
+require_once __DIR__.'/../src/GoogleAuthenticator.php';
+require_once __DIR__.'/../src/user.php';
+require_once __DIR__.'/../src/dashboard.php';
+require_once __DIR__.'/../src/model/HostDetail.php';
+
 // HTTP
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,6 +32,7 @@ use oasix\user;
 
 // Declaration on app
 $app = new Silex\Application();
+$app['debug'] = true;
 // Provider
 $app->register(new Silex\Provider\SessionServiceProvider());
 
@@ -57,11 +65,12 @@ $app->register(new login());
 
 
 
-$app->get('/login', function () use ($app) {
+$app->get('/login', function (Request $request) use ($app) {
     // ...
 
     return $app['twig']->render('login.twig', array(
-        'last_username' => $app['session.cookie']->get('lastusername'),
+        'last_username' => $request->cookies->get('lastusername'),
+        'error' => ''
     ));
 });
 
@@ -75,7 +84,7 @@ $app->post('/login', function(Request $request) use ($app){
     }
 
     return $app['twig']->render('login.twig', array(
-        'last_username' => $app['session.cookie']->get('lastusername'),
+        'last_username' => $request->cookies->get('lastusername'),
         'error' => $app['login.error'],
     ));
 });
