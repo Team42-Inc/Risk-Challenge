@@ -26,20 +26,20 @@
 <form action="{{ path('user-add') }}" method="post">
 
     <div class="form-group">
-        <label for="username">Nom d'utilisateur :</label>
+        <label for="username">User Name:</label>
         <input class="form-control" type="text" id="username" name="_username" placeholder="pseudonyme" required/>
     </div>
 
     <div class="form-group">
-        <label for="password">Mot de pass :</label>
-        <input class="form-control" type="password" id="password" name="_password" placeholder="mot de pass" required/>
+        <label for="password">Password:</label>
+        <input class="form-control" type="password" id="password" name="_password" placeholder="password" required/>
     </div>
 
     <div class="form-group">
-        <label for="mail">Email :</label>
+        <label for="mail">Mail:</label>
         <input class="form-control" type="email" id="mail" name="_mail" placeholder="mail" required/>
     </div>
 
-    <button type="submit" class="btn btn-default">Inscrire</button>
+    <button type="submit" class="btn btn-default">Register</button>
 </form>
 {% endblock %}
