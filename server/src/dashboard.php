@@ -36,6 +36,7 @@ class dashboard implements ServiceProviderInterface
     public function run(){
         if( !$this->getAgentList() ) {
             $this->app['dashboard.error'] = "fail to get agent list";
+            die("Wrong");
             return false;
         }
         $len = $this->app['dashboard.nb_agent'];
@@ -54,14 +55,14 @@ class dashboard implements ServiceProviderInterface
     private function getAgentList(){
 
         $this->app['dashboard.agents']=array(
-            array('host' =>  'www.mra.mu'),
-            array('host' =>  'www.govmu.mu'),
-            array('host' =>  'ta.gov-mu.org'),
+            array('host' =>  'www.mra.mu', 'rate' => 89, 'trend' => -1),
+            array('host' =>  'www.govmu.mu', 'rate' => 67, 'trend' => 1),
+            array('host' =>  'ta.gov-mu.org', 'rate' => 95, 'trend' => 0),
         );
         $this->app['dashboard.nb_agent'] = count($this->app['dashboard.agents']);
         return true;
         //get the list of agents in database
-        $sql = "SELECT hosts FROM agents";
+        $sql = "SELECT * FROM agents";
         $data = $this->app['dbs']['mysql_read']->fetchAll($sql);
         if( isset( $data ) ) {
             $this->app['dashboard.agents'] = array();
@@ -69,13 +70,13 @@ class dashboard implements ServiceProviderInterface
                 $len = count( $data );
                 $this->app['dashboard.nb_agent'] = $len;
                 for($i = 0 ; $i < $len ; $i ++ ){
-                    $hosts = str_split( $data[$i]['hosts'], ',' );
+                    $hosts = str_split( $data[$i]['hosts'], ' ' );
                     $len = count( $hosts );
                     for( $j=0 ; $j<$len; $j++ ) {
                         if( empty($hosts[$j]))
                             continue;
                         $this->app['dashboard.agents'][] = array(
-                            'host' => $hosts[$j]
+                            'host' => $hosts[$j],
                         );
                     }
                 }

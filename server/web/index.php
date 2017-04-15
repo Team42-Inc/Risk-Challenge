@@ -113,7 +113,7 @@ $app->get('/dashboard', function (Request $request) use ($app) {
      * @todo: remettre la bonne valeur pour hosts
      */
     return $app['twig']->render('dashboard.twig', array(
-        'hosts' => isset($app['dashboard.agents']) ? array() : array(),
+        'hosts' => isset($app['dashboard.agents']) ? $app['dashboard.agents'] : array(),
         'admins' => isset($app['admins.listCurrentAdmin']) ? $app['admins.listCurrentAdmin'] : array(),
         'page_name' => 'Dashboard',
         'username' => $app['session']->get('user')['username'],
