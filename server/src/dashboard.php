@@ -18,7 +18,6 @@ class dashboard implements ServiceProviderInterface
 {
     public $app;
 
-    public $url = "";
     /**
      * Registers services on the given container.
      *
@@ -31,7 +30,7 @@ class dashboard implements ServiceProviderInterface
     {
         $this->app = $app;
         $app['dashboard'] = $this;
-        $this->url = isset( $params, $params['urlDashBoard'] ) ? $params['urlDashBoard'] : $this->url;
+
     }
 
     public function run(){
@@ -39,10 +38,12 @@ class dashboard implements ServiceProviderInterface
             $this->app['dashboard.error'] = "fail to get agent list";
             return false;
         }
+        echo ("url ".$this->app['dashboard.urlDashBoard']);
         $len = $this->app['dashboard.nb_agent'];
         for( $i = 0; $i < $len ; $i++ ){
             $req = new Request();
-            $req->create($this->url, 'GET', array("host"=>$this->app['dashboard.agents'][$i]['host']));
+            $req->create($this->app['dashboard.urlDashBoard'], 'GET', array("host"=>$this->app['dashboard.agents'][$i]['host']));
+            echo( "content : " . $req->getContent() );
             $this->parseHost($i, $req->getContent());
         }
     }
@@ -53,6 +54,14 @@ class dashboard implements ServiceProviderInterface
     }
 
     private function getAgentList(){
+
+        $this->app['dashboard.agents']=array(
+            array('host' =>  'www.mra.mu'),
+            array('host' =>  'www.govmu.mu'),
+            array('host' =>  'ta.gov-mu.org'),
+        );
+        $this->app['dashboard.nb_agent'] = count($this->app['dashboard.agents']);
+        return true;
         //get the list of agents in database
         $sql = "SELECT hosts FROM agents";
         $data = $this->app['dbs']['mysql_read']->fetchAll($sql);
