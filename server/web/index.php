@@ -64,7 +64,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 ));
 
 $app->register(new login());
-$app->register(new dashboard(), array('url' => 'http://10.0.2.57:8080/servers/state'));
+$app->register(new dashboard(), array('dashboard.urlDashBoard' => 'http://10.0.2.57:8080/servers/state'));
 
 
 
@@ -102,7 +102,7 @@ $app->get('/dashboard', function (Request $request) use ($app) {
         "country" => "MU"
     )
     );
-
+    var_dump($app['dashboard.agents']);
     return $app['twig']->render('dashboard.twig', array(
         'hosts' => $app['dashboard.agents'],
         'admins' => $app['admins.listCurrentAdmin']
@@ -112,6 +112,7 @@ $app->get('/dashboard', function (Request $request) use ($app) {
 $app->get('/agent/{id}', function ($id) use ($app) {
     // ...
 
+
     return $app['twig']->render('agent.twig', array(
         'error' => '',
     ));
@@ -119,6 +120,12 @@ $app->get('/agent/{id}', function ($id) use ($app) {
 
 $app->get('/user/profile', function () use ($app) {
     // ...
+    $app['admins.listCurrentAdmin'] = array( array(
+        "user" => "default",
+        "ip"   => $request->getClientIp(),
+        "country" => "MU"
+    )
+    );
 
     return $app['twig']->render('user.twig', array(
         'error' => '',
