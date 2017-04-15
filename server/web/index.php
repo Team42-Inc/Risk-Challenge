@@ -98,6 +98,36 @@ $app->get('/user/profile', function () use ($app) {
     ));
 });
 
+
+$app->get('/user/add', function () use ($app) {
+    // ...
+
+    return $app['twig']->render('useradd.twig', array(
+        'error' => '',
+    ));
+});
+
+$app->post('/user/add', function (Request $request) use ($app) {
+
+    $username = $request->get('_username');
+    if( $app['user']->AddUser($request->get('_username') , $request->get('_password'), $request->get('_mail')  ) ){
+        if( $app['user.add.logout'] ){
+            return $app->redirect('/login');
+        }else{
+            return $app['twig']->render('user_add_ok.twig', array(
+                'username'  => $username,
+                'urlQRCode' => $app['user.add.otp.QRCodeUrl'],
+                'secret'    => $app['user.add.otp.secret']
+            ));
+        }
+
+    }
+
+    return $app['twig']->render('useradd.twig', array(
+        'error' => $app['user.add.error'],
+    ));
+});
+
 $app->get('/server/profile', function () use ($app) {
     // ...
 

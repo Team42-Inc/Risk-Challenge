@@ -1,0 +1,28 @@
+{% if error %}
+    <div class="bg-danger">{{ error }}</div>
+{% endif %}
+<h3>Ajouter un utilisateur</h3>
+
+{% if warningDefaultUser %}
+    <div class="bg-danger"><h1>ATTENTION vous êtes connectés en "DEFAULT" la création d'un nouveau compte supprimera celui-ci</h1></div>
+{% endif %}
+
+<form action="{{ path('user/add') }}" method="post">
+
+    <div class="form-group">
+        <label for="username">Nom d'utilisateur :</label>
+        <input class="form-control" type="text" id="username" name="_username" placeholder="pseudonyme" required/>
+    </div>
+
+    <div class="form-group">
+        <label for="password">Mot de pass :</label>
+        <input class="form-control" type="password" id="password" name="_password" placeholder="mot de pass" required/>
+    </div>
+
+    <div class="form-group">
+        <label for="mail">Email :</label>
+        <input class="form-control" type="email" id="mail" name="_mail" placeholder="mail" required/>
+    </div>
+
+    <button type="submit" class="btn btn-default">Inscrire</button>
+</form>

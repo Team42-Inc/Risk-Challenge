@@ -2,12 +2,19 @@
 
 tables admins :
 
-id (int) (primary)
+id (int) (primary autoinc)
 user (varchar) (key)
+email (varchar)
 passhash (varchar 64)
-last_connect (int)
-last_ip (int)
+last_connect (int defaut 0)
+last_ip (varchar 24 defaut '')
 otpkey (varchar 64)
+
+
+// add default user "default:adminadmin" otp is bypass for this user and
+// then it will be remove when the first user is added
+INSERT INTO admins (user,email,passhash,otpkey )
+VALUES ("default", "default@default.com", "$2y$10$KSCRpE.Yh/H1xuAdtLS2KuEB5GHSMUOPnrT1K9IkBVwzTcWC2GUbm" , "")
 
 /////////////////////////////////////
 
