@@ -13,6 +13,7 @@
             </a>
             <div class="navbar-custom-menu">
                 <!-- @todo: faire menu une fois logué -->
+                {% block navigationhead %}{% endblock %}
             </div>
         </nav>
     </header>
@@ -27,6 +28,7 @@
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
             </div>
+            {% block sidebarmenu %}{% endblock %}
         </section>
     </aside>
     <div class="content-wrapper">
@@ -44,5 +46,6 @@
             {% block content %}{% endblock %}
         </section>
     </div>
+    {% include 'footer-content.twig' %}
 </div>
 {% include 'footer.twig' %}

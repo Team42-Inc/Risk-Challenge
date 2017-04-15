@@ -65,6 +65,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 
 $app->register(new login());
 $app->register(new dashboard(), array('dashboard.urlDashBoard' => 'http://10.0.2.57:8080/servers/state'));
+$app->register(new user());
 
 
 
@@ -104,9 +105,12 @@ $app->get('/dashboard', function (Request $request) use ($app) {
     )
     );
     var_dump($app['dashboard.agents']);
+    /*
+     * @todo: remettre la bonne valeur pour hosts
+     */
     return $app['twig']->render('dashboard.twig', array(
-        'hosts' => $app['dashboard.agents'],
-        'admins' => $app['admins.listCurrentAdmin']
+        'hosts' => isset($app['dashboard.agents']) ? array() : array(),
+        'admins' => isset($app['admins.listCurrentAdmin']) ? $app['admins.listCurrentAdmin'] : array()
     ));
 });
 
@@ -119,7 +123,7 @@ $app->get('/agent/{id}', function ($id) use ($app) {
     ));
 });
 
-$app->get('/user/profile', function () use ($app) {
+$app->get('/user/profile', function (Request $request) use ($app) {
     // ...
     $app['admins.listCurrentAdmin'] = array( array(
         "user" => "default",
@@ -134,13 +138,23 @@ $app->get('/user/profile', function () use ($app) {
 });
 
 
-$app->get('/user/add', function () use ($app) {
+$app->get('/user/add', function (Request $request) use ($app) {
     // ...
+    $app['admins.listCurrentAdmin'] = array( array(
+        "user" => "default",
+        "ip"   => $request->getClientIp(),
+        "country" => "MU"
+    )
+    );
+
+    $session_user = $app['session']->get('user');
 
     return $app['twig']->render('useradd.twig', array(
         'error' => '',
+        'admins' => $app['admins.listCurrentAdmin'],
+        'warningDefaultUser' => $session_user=='default'?'yes':'',
     ));
-});
+})->bind('user/add');
 
 $app->post('/user/add', function (Request $request) use ($app) {
 
@@ -160,6 +174,8 @@ $app->post('/user/add', function (Request $request) use ($app) {
 
     return $app['twig']->render('useradd.twig', array(
         'error' => $app['user.add.error'],
+        'warningDefaultUser' =>'',
+        '' =>'',
     ));
 });
 
@@ -175,7 +191,7 @@ $app->get('/logout', function () {
     // ...
 
     return "";
-});
+})->bind('logout');
 
 $app->post('/register/agent', function (Request $request) use ($app) {
     /* post data are

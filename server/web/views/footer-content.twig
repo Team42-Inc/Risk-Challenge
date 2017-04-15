@@ -1,0 +1,16 @@
+<footer class="main-footer">
+    <div class="pull-right hidden-xs">
+        <b>Version</b> 0.1-alpha
+    </div>
+    <strong>Copyright &copy; 2017 <a href="http://team42-inc.com">Team 42, Inc</a>.</strong> All rights
+    reserved.
+    <div class="container">
+        <ul>
+            {% if admins %}
+                {% for admin in admins %}
+                    <li><span>{{ admin.user }}</span><span>{{ admin.ip }}</span><span>{{ admin.country }}</span></li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+</footer>
