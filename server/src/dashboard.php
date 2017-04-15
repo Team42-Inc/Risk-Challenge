@@ -62,9 +62,9 @@ class dashboard implements ServiceProviderInterface
     private function getAgentList(){
 
         $this->app['dashboard.agents']=array(
-            array('host' =>  'www.mra.mu', 'rate' => 89, 'trend' => -1),
-            array('host' =>  'www.govmu.mu', 'rate' => 67, 'trend' => 1),
-            array('host' =>  'ta.gov-mu.org', 'rate' => 95, 'trend' => 0),
+            array('agent' =>  'agent-1.2.3.4', 'host' =>  '1.2.3.4', 'rate' => 89, 'trend' => -1),
+            array('agent' =>  'agent-89.43.123.69', 'host' =>  '89.43.123.69', 'rate' => 67, 'trend' => 1),
+            array('agent' =>  'agent-102.34.98.105', 'host' =>  '102.34.98.105', 'rate' => 95, 'trend' => 0),
         );
         $this->app['dashboard.nb_agent'] = count($this->app['dashboard.agents']);
         return true;
