@@ -42,7 +42,6 @@ class dashboard implements ServiceProviderInterface
         for( $i = 0; $i < $len ; $i++ ){
             $req = new Request();
             $req->create($this->app['dashboard.urlDashBoard'], 'GET', array("host"=>$this->app['dashboard.agents'][$i]['host']));
-            echo( "content : " . $req->getContent() );
             $this->parseHost($i, $req->getContent());
         }
     }

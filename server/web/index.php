@@ -78,6 +78,7 @@ $app->get('/login', function (Request $request) use ($app) {
         'last_username' => $request->cookies->get('lastusername'),
         'error' => '',
         'admins' => array(),
+        'page_name' => 'Connexion',
     ));
 })->bind('login');
 
@@ -111,7 +112,9 @@ $app->get('/dashboard', function (Request $request) use ($app) {
      */
     return $app['twig']->render('dashboard.twig', array(
         'hosts' => isset($app['dashboard.agents']) ? array() : array(),
-        'admins' => isset($app['admins.listCurrentAdmin']) ? $app['admins.listCurrentAdmin'] : array()
+        'admins' => isset($app['admins.listCurrentAdmin']) ? $app['admins.listCurrentAdmin'] : array(),
+        'page_name' => 'Dashboard',
+        'username' => $app['session']->get('user')['username'],
     ));
 });
 
@@ -180,6 +183,7 @@ $app->get('/user/profile', function (Request $request) use ($app) {
 
     return $app['twig']->render('user.twig', array(
         'error' => '',
+        'page_name' => 'User > Profile',
     ));
 });
 
@@ -199,6 +203,7 @@ $app->get('/user/add', function (Request $request) use ($app) {
         'error' => '',
         'admins' => $app['admins.listCurrentAdmin'],
         'warningDefaultUser' => $session_user=='default'?'yes':'',
+        'page_name' => 'User > Add',
     ));
 })->bind('user/add');
 
@@ -230,6 +235,7 @@ $app->get('/server/profile', function () use ($app) {
 
     return $app['twig']->render('server.twig', array(
         'error' => '',
+        'page_name' => 'Server > Profile',
     ));
 });
 
