@@ -8,6 +8,7 @@
 
 // web/index.php
 require_once __DIR__.'/../vendor/autoload.php';
+//$loader->add('oasix', __DIR__.'/../src');
 
 // HTTP
 use Symfony\Component\HttpFoundation\Request;
@@ -16,6 +17,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+// OasiX
+use oasix\agent;
+use oasix\dashboard;
+use oasix\login;
+use oasix\user;
 
 // Declaration on app
 $app = new Silex\Application();
@@ -47,7 +53,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/views',
 ));
 
-$app->register(new \oasix\login());
+$app->register(new login());
 
 
 

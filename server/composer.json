@@ -4,5 +4,10 @@
         "twig/twig": "^1.33",
         "symfony/form": "^3.2",
         "symfony/twig-bridge": "^3.2"
+    },
+    "autoload": {
+        "psr-0": {
+            "oasix": "src/"
+        }
     }
 }
