@@ -1,14 +1,15 @@
 ////////////////////////////////////
 
-tables admins :
+table admins :
 
-id (int) (primary autoinc)
-user (varchar) (key)
-email (varchar)
-passhash (varchar 64)
-last_connect (int defaut 0)
-last_ip (varchar 24 defaut '')
-otpkey (varchar 64)
+id              (int) (primary autoinc)
+user            (varchar) (key)
+email           (varchar)
+passhash        (varchar 64)
+last_connect    (int defaut 0)
+last_ip         (varchar 24 defaut '')
+otpkey          (varchar 64)
+access_level    (int default 100 )
 
 
 // add default user "default:adminadmin" otp is bypass for this user and
@@ -17,4 +18,19 @@ INSERT INTO admins (user,email,passhash,otpkey )
 VALUES ("default", "default@default.com", "$2y$10$KSCRpE.Yh/H1xuAdtLS2KuEB5GHSMUOPnrT1K9IkBVwzTcWC2GUbm" , "")
 
 /////////////////////////////////////
+
+table agents :
+id
+agentname
+privatekey
+ip
+
+//////////////////////////////////////
+table agents_conf :
+id
+id_agent
+access_level
+metrix_name
+level_warning  (decimal 10,3)
+level_critical (decimal 10,3)
 
