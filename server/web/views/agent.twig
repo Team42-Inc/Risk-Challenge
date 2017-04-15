@@ -1,28 +1,35 @@
+<style>
+    .chart{
+        
+    }
+</style>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(draw{{ char_name }});
+    google.charts.load('current', {'packages':['corechart','geochart']});
+    var datas = {{ dataraw|raw }};
+    google.charts.setOnLoadCallback(draw);
+    function draw() {
+        var nbChar = datas.length;
+        var container = document.getElementById('charts');
 
-    function draw{{ char_name }}() {
-        var data = google.visualization.arrayToDataTable([
-            [{{ char_x_name|raw }}, {{ char_y_names|raw }}],
-            {{ char_datas|raw }}
-        ]);
-
-        {% if char_options  %}
-        var options = {{ char_options }};
-        {% else %}
-        var options =  {
-            title: 'title',
-            curveType: 'function',
-            legend: { position: 'bottom' }
-        };
-        {% endif %}
-
-
-        var chart = new google.visualization.LineChart(document.getElementById('chart_{{ char_name }}'));
-
-        chart.draw(data, options);
+        for( var i =0; i<nbChar; i++ ){
+            var myGraph = datas[i];
+            var data = google.visualization.arrayToDataTable(
+                myGraph.char_datas
+            );
+            var options = myGraph.char_options;
+            container.innerHTML += '<div id="chart_'+myGraph.char_name+'"></div>';
+            var item = document.getElementById('chart_'+myGraph.char_name);
+            switch ( myGraph.char_type ){
+                case 'line':
+                    (new google.visualization.LineChart(item)).draw(data,options);
+                    break;
+                case 'geochart':
+                    (new google.visualization.GeoChart(item)).draw(data,options);
+                    break;
+            }
+        }
+        return;
     }
 </script>
-<div id="chart_{{ char_name }}" style="width: 900px; height: 500px"/>
+<div id="charts" class="chart"></div>

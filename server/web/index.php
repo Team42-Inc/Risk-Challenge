@@ -17,6 +17,7 @@ require_once __DIR__.'/../src/user.php';
 require_once __DIR__.'/../src/dashboard.php';
 require_once __DIR__.'/../src/model/HostDetail.php';
 require_once __DIR__.'/../src/model/Connexion.php';
+require_once __DIR__.'/../src/model/Rate.php';
 
 // HTTP
 use Symfony\Component\HttpFoundation\Request;
@@ -67,7 +68,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 $app->register(new login());
 $app->register(new dashboard(), array('dashboard.urlDashBoard' => 'http://10.0.2.57:8080/servers/state'));
 $app->register(new user());
-$app->register(new agent());
+$app->register(new agent(), array('agent.urlConnexionsHistory' => 'http://10.0.2.57:8080/servers/history'));
 
 
 $app->get('/login', function (Request $request) use ($app) {
@@ -116,15 +117,55 @@ $app->get('/dashboard', function (Request $request) use ($app) {
 
 $app->get('/agent/{id}', function ($id) use ($app) {
     // ...
-    $app['agent']->getConnexions( $id );
+    $app['agent'] -> getConnexions( $id );
+    $app['agent'] -> getRates( $id );
+
+
+    $dataConnexionPort = array(
+        'char_name' => 'connexions',
+        'char_datas' => $app['agent.connexions.graph.port']['datas'],
+        'char_options' => array(
+            'title'     => 'connexions',
+            'curveType' => 'function',
+            'legend' => array( 'position' => 'bottom' )
+        ),
+        'char_type' => 'line'
+    );
+
+    $dataSuspiciousPays = array(
+        'char_name' => 'Suspicious_pays',
+        'char_datas' => $app['agent'] -> getMapGraphSuspiciousData(),
+        'char_options' => array(
+            'title' => 'Suspicious Connexion',
+            'colorAxis' => array('colors' => array('#FF0000') ),
+            'backgroundColor' => '#81d4fa',
+            'datalessRegionColor' => '#FFFFFF',
+            'defaultColor' => '#FFFFFF',
+        ),
+        'char_type' => 'geochart'
+    );
+
+    $dataRate = array(
+        'char_name' => 'rates',
+        'char_datas' => $app['agent']->getLineRatesData() ,
+        'char_options' => array(
+            'title'     => 'Safety Rates',
+            'curveType' => 'function',
+            'legend' => array( 'position' => 'bottom' )
+        ),
+        'char_type' => 'line'
+    );
+
 
     return $app['twig']->render('agent.twig', array(
-        'char_name' => 'connexions',
-        'char_x_name' => '"time"',
-        'char_y_names' => '"' . implode('","', $app['agent.connexions.graph.port']['label_x']) . '"',
-        'char_datas' =>   substr( json_encode($app['agent.connexions.graph.port']['datas']) , 1, -1) ,
-        'char_options' => '',
-        'error' => '',
+        'dataraw' => json_encode(
+            array(
+                $dataRate,
+                $dataConnexionPort,
+                $dataSuspiciousPays
+            )
+        ),
+        'error' => ''
     ));
 });
 

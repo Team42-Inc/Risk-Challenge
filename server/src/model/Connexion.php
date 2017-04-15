@@ -6,6 +6,8 @@
  * Date: 15/04/2017
  * Time: 18:28
  */
+namespace oasix;
+
 class Connexion
 {
     public $id;

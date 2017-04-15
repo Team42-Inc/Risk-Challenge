@@ -1,4 +1,5 @@
 <?php
+namespace oasix;
 
 /**
  * Created by PhpStorm.
