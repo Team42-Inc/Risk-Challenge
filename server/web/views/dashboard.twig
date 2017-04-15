@@ -21,25 +21,6 @@
         </div>
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
-            {% if global_security > 95  %}
-                 <div class="small-box bg-green">
-            {% elseif global_security > 80  %}
-                 <div class="small-box bg-yellow">
-            {% else  %}
-                 <div class="small-box bg-red">
-            {% endif  %}
-                <div class="inner">
-                    <h3>{{ global_security }}<sup style="font-size: 20px">%</sup></h3>
-
-                    <p>Global Security</p>
-                </div>
-                <div class="icon">
-                    <i class="ion ion-stats-bars"></i>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
             {% if package_to_update < 5  %}
             <div class="small-box bg-green">
             {% elseif package_to_update < 20  %}
@@ -74,6 +55,25 @@
                 </div>
                 <div class="icon">
                     <i class="ion ion-pie-graph"></i>
+                </div>
+            </div>
+        </div>
+    <div class="col-lg-3 col-xs-6">
+    <!-- small box -->
+    {% if global_security > 95  %}
+    <div class="small-box bg-green">
+        {% elseif global_security > 80  %}
+        <div class="small-box bg-yellow">
+            {% else  %}
+            <div class="small-box bg-red">
+                {% endif  %}
+                <div class="inner">
+                    <h3>{{ global_security }}<sup style="font-size: 20px">%</sup></h3>
+
+                    <p>Global Security</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-stats-bars"></i>
                 </div>
             </div>
         </div>
