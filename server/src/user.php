@@ -28,9 +28,15 @@ class user implements ServiceProviderInterface
     {
         $this->app = $app;
         $app['user'] = $this;
+
+        $app['user.add.error'] = '';
+        $app['user.add.otp.secret'] = '';
+        $app['user.add.otp.QRCodeUrl'] = '';
+        $this->app['user.add.logout'] = false;
     }
 
     public function AddUser($username, $password, $email ){
+        $app = $this->app;
         //check username
         if( strlen($username) < 4 || $username == "default"){
             $app['user.add.error'] = "username too short";
@@ -45,7 +51,7 @@ class user implements ServiceProviderInterface
         //check if it's a new user
         $sql = "SELECT user FROM admins WHERE user = ? OR email = ? LIMIT 1;";
         $baseData = $this->app['dbs']['mysql_read']->fetchAll($sql, array($username, $email) );
-        if( isset($baseData, $baseData['user'] ) ){
+        if( isset($baseData, $baseData[0], $baseData[0]['user'] ) ){
             $app['user.add.error'] = "username allready exist";
             return false;
         }
@@ -84,9 +90,9 @@ class user implements ServiceProviderInterface
 
             $this->app['session']->invalidate(0);
 
-            $app['user.add.logout'] = true;
+            $this->app['user.add.logout'] = true;
         }
-
+        $this->app['user.add.error'] = '';
         return true;
     }
 }
