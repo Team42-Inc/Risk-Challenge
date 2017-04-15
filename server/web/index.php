@@ -35,7 +35,7 @@ $app = new Silex\Application();
 $app['debug'] = true;
 // Provider
 $app->register(new Silex\Provider\SessionServiceProvider());
-$app->register(new Silex\Provider\UrlGeneratorServiceProvider ());
+$app->register(new Silex\Provider\RoutingServiceProvider());
 
 $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     'dbs.options' => array (
@@ -73,7 +73,7 @@ $app->get('/login', function (Request $request) use ($app) {
         'last_username' => $request->cookies->get('lastusername'),
         'error' => ''
     ));
-});
+})->bind('login');
 
 $app->post('/login', function(Request $request) use ($app){
     if( $app['login']->checkLogin( $request  ) ){
