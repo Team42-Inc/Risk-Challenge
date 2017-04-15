@@ -121,8 +121,8 @@ $app->get('/dashboard', function (Request $request) use ($app) {
     $package_to_update = 0;
     $global_security = 0;
     foreach ($listHosts as $host ){
-        $nb_vulnerabilities += $host['vulnerabilities'];
-        $package_to_update += $host['updates'];
+        $nb_vulnerabilities += $host['vulnerabilitiesCount'];
+        $package_to_update += $host['requiredUpdatesCount'];
         $global_security += $host['rate'];
         $i++;
     }
@@ -215,6 +215,7 @@ $app->get('/agent-{id}', function (Request $request, $id) use ($app) {
 })->bind('agent');
 
 $app->get('/user-profile', function (Request $request) use ($app) {
+    $app['dashboard']->run();
     // ...
     $app['admins.listCurrentAdmin'] = array( array(
         "user" => "default",
@@ -226,11 +227,13 @@ $app->get('/user-profile', function (Request $request) use ($app) {
     return $app['twig']->render('user.twig', array(
         'error' => '',
         'page_name' => 'User > Profile',
+        'hosts' => isset($app['dashboard.agents']) ? $app['dashboard.agents'] : array(),
     ));
 });
 
 
 $app->get('/user-add', function (Request $request) use ($app) {
+    $app['dashboard']->run();
     // ...
     $app['admins.listCurrentAdmin'] = array( array(
         "user" => "default",
@@ -246,10 +249,13 @@ $app->get('/user-add', function (Request $request) use ($app) {
         'admins' => $app['admins.listCurrentAdmin'],
         'warningDefaultUser' => $session_user=='default'?'yes':'',
         'page_name' => 'User > Add',
+        'hosts' => isset($app['dashboard.agents']) ? $app['dashboard.agents'] : array(),
     ));
 })->bind('user-add');
 
 $app->post('/user-add', function (Request $request) use ($app) {
+    $app['dashboard']->run();
+
     $app['admins.listCurrentAdmin'] = array( array(
         "user" => "default",
         "ip"   => $request->getClientIp(),
@@ -267,6 +273,7 @@ $app->post('/user-add', function (Request $request) use ($app) {
                 'urlQRCode' => $app['user.add.otp.QRCodeUrl'],
                 'secret'    => $app['user.add.otp.secret'],
                 'admins' => $app['admins.listCurrentAdmin'],
+                'hosts' => isset($app['dashboard.agents']) ? $app['dashboard.agents'] : array(),
                 'page_name' => 'User > Add',
             ));
         }
@@ -278,23 +285,26 @@ $app->post('/user-add', function (Request $request) use ($app) {
         'warningDefaultUser' =>'',
         'page_name' => 'User > Add',
         'admins' => $app['admins.listCurrentAdmin'],
+        'hosts' => isset($app['dashboard.agents']) ? $app['dashboard.agents'] : array(),
         '' =>'',
     ));
 });
 
 $app->get('/server/profile', function () use ($app) {
+    $app['dashboard']->run();
     // ...
 
     return $app['twig']->render('server.twig', array(
         'error' => '',
         'page_name' => 'Server > Profile',
+        'hosts' => isset($app['dashboard.agents']) ? $app['dashboard.agents'] : array(),
     ));
 });
 
 $app->get('/logout', function () use ($app) {
     // ...
     $app['session']->invalidate(0);
-    return  $app->redirect('dashboard');;
+    return  $app->redirect('login');;
 })->bind('logout');
 
 $app->post('/register/agent', function (Request $request) use ($app) {

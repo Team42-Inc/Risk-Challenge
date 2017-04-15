@@ -42,7 +42,7 @@ class dashboard implements ServiceProviderInterface
         $len = $this->app['dashboard.nb_agent'];
         for( $i = 0; $i < $len ; $i++ ){
             $req = new Request();
-            $req->create($this->app['dashboard.urlDashBoard'], 'GET', array("host"=>$this->app['dashboard.agents'][$i]['host']));
+            $req->create($this->app['dashboard.urlDashBoard'], 'GET', array("host"=> $this->app['dashboard.agents'][$i]['host']));
             $this->parseHost($i, $req->getContent());
         }
         $tmp = $this->app['dashboard.agents'];
@@ -55,16 +55,18 @@ class dashboard implements ServiceProviderInterface
 
 
     private function parseHost($index, $content ){
+        if( !isset( $content) || empty($content) )
+            return;
         $data = @json_decode($content);
         $this->app['dashboard.agents'][$index] = HostDetail::fromJSON($data);
     }
 
     private function getAgentList(){
 
-        $this->app['dashboard.agents']=array(
-            array('agent' =>  'agent-1.2.3.4', 'host' =>  '1.2.3.4', 'rate' => 89, 'trend' => 1, 'updates'=>4, 'vulnerabilities'=> 3),
-            array('agent' =>  'agent-89.43.123.69', 'host' =>  '89.43.123.69', 'rate' => 67, 'trend' => -1, 'updates'=>23, 'vulnerabilities'=> 47),
-            array('agent' =>  'agent-102.34.98.105', 'host' =>  '102.34.98.105', 'rate' => 95, 'trend' => 0, 'updates'=>2, 'vulnerabilities'=> 1),
+        $this->app['dashboard.agents']= array(
+            array('agent' =>  'agent-1.2.3.4', 'host' =>  '1.2.3.4', 'rate' => 89, 'trend' => 1, 'requiredUpdatesCount'=>4, 'vulnerabilitiesCount'=> 3),
+            array('agent' =>  'agent-89.43.123.69', 'host' =>  '89.43.123.69', 'rate' => 67, 'trend' => -1, 'requiredUpdatesCount'=>23, 'vulnerabilitiesCount'=> 47),
+            array('agent' =>  'agent-102.34.98.105', 'host' =>  '102.34.98.105', 'rate' => 95, 'trend' => 0, 'requiredUpdatesCount'=>2, 'vulnerabilitiesCount'=> 1),
         );
         $this->app['dashboard.nb_agent'] = count($this->app['dashboard.agents']);
         return true;

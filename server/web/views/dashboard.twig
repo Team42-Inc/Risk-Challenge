@@ -103,21 +103,21 @@
                     <tr>
                         <td><a href="{{ path('agent', {'id': host.host}) }}">{{ host.agent }}</a></td>
                         <td>{{host.host}}</td>
-                        {% if host.vulnerabilities == 0 %}
-                            <td><span class="label label-success">{{host.vulnerabilities}}</span></td>
-                        {% elseif host.vulnerabilities <= 4 %}
-                            <td><span class="label label-warning">{{host.vulnerabilities}}</span></td>
+                        {% if host.vulnerabilitiesCount == 0 %}
+                            <td><span class="label label-success">{{host.vulnerabilitiesCount}}</span></td>
+                        {% elseif host.vulnerabilitiesCount <= 4 %}
+                            <td><span class="label label-warning">{{host.vulnerabilitiesCount}}</span></td>
                         {% else %}
-                            <td><span class="label label-danger">{{host.vulnerabilities}}</span></td>
+                            <td><span class="label label-danger">{{host.vulnerabilitiesCount}}</span></td>
                         {% endif %}
 
 
-                        {% if host.updates < 5 %}
-                            <td><span class="label label-success">{{host.updates}}</span></td>
-                        {% elseif host.updates < 20 %}
-                            <td><span class="label label-warning">{{host.updates}}</span></td>
+                        {% if host.requiredUpdatesCount < 5 %}
+                            <td><span class="label label-success">{{host.requiredUpdatesCount}}</span></td>
+                        {% elseif host.requiredUpdatesCount < 20 %}
+                            <td><span class="label label-warning">{{host.requiredUpdatesCount}}</span></td>
                         {% else %}
-                            <td><span class="label label-danger">{{host.updates}}</span></td>
+                            <td><span class="label label-danger">{{host.requiredUpdatesCount}}</span></td>
                         {% endif %}
 
                         {% if host.rate > 90 %}
