@@ -6,6 +6,6 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchCrudReposi
 
 import oasix.middleware.model.ConnectionStats;
 
-public interface ConnectionStatsRepository extends ElasticsearchCrudRepository<ConnectionStats, Long> {
+public interface ConnectionStatsRepository extends ElasticsearchCrudRepository<ConnectionStats, String> {
 	List<ConnectionStats> findByHost(String host);
 }

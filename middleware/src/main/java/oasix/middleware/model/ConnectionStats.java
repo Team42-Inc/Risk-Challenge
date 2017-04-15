@@ -1,15 +1,23 @@
 package oasix.middleware.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Document(indexName="oasix-connections", type="connection")
 public class ConnectionStats {
 	@Id
-	private Long id;
+	private String id;
 	
+	@Field( type = FieldType.Date, format = DateFormat.custom, pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date timestamp;
 	
 	private String host;
@@ -37,13 +45,16 @@ public class ConnectionStats {
 		this.ip=ip;
 		this.country=country;
 		this.isSuspicious=isSuspicious;
+		
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss");
+		this.id = host + "-" + df.format(timestamp)+"-"+port+"-"+ip+"-"+isSuspicious;
 	}
 	
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

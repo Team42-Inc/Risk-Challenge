@@ -25,6 +25,9 @@ public class AnalysisService {
 	@Autowired
 	NiktoService niktoService;
 	
+	@Autowired
+	VulnerabilityStatsService vulnerabilityStatsService;
+	
 	@Async
 	public void analyse(String host, Date analysisTime){
 		ServerState serverState = createServerState(analysisTime, host);
@@ -65,14 +68,16 @@ public class AnalysisService {
 		serverState.setRequiredUpdate(requiredUpdates);
 		
 		serverState.setStatus("OK");
-		serverState.setRate(evaluate(serverState));
+		serverState.setRate(""+evaluate(serverState));
 		serverState.setTrend("UP");
+		
+		vulnerabilityStatsService.aggregate(serverState);
 		
 		return serverState;
 	}
 	
-	private String evaluate(ServerState serverState){
-		return "A";
+	private Integer evaluate(ServerState serverState){
+		return 70;
 	}
 
 	public void cleanup() {
