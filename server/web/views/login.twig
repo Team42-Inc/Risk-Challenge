@@ -1,7 +1,6 @@
-{% include 'header.twig' %}
-<body>
+{% extends "wrapper.twig" %}
 
-<div style="position: absolute; top: 0; left: 0; bottom: 0; right: 0; margin: auto; max-width: 300px">
+{% block content %}
 <div class="container" >
     {% if error %}
         <div>{{ error }}</div>
@@ -26,7 +25,5 @@
 
         <button type="submit" class="btn btn-default">Connexion</button>
     </form>
-    </div>
 </div>
-</body>
-</html>
+{% endblock %}
