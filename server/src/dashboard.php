@@ -38,7 +38,6 @@ class dashboard implements ServiceProviderInterface
             $this->app['dashboard.error'] = "fail to get agent list";
             return false;
         }
-        echo ("url ".$this->app['dashboard.urlDashBoard']);
         $len = $this->app['dashboard.nb_agent'];
         for( $i = 0; $i < $len ; $i++ ){
             $req = new Request();

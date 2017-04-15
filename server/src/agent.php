@@ -33,10 +33,10 @@ class agent implements ServiceProviderInterface
         $this->app = $app;
     }
 
-    public function getConnexions(){
+    public function getConnexions( $id ){
         //TODO get connexion
 
-        $datastr = file_get_contents(__DIR__.'/../src/http___10_0_2_57_8080_servers_metrics_connections_host_www_govmu_org');
+        $datastr = file_get_contents(__DIR__.'/../tmpData/http___10_0_2_57_8080_servers_metrics_connections_host_www_govmu_org');
         $data = json_decode($datastr);
         $this->app['agent.connexions'] = \Connexion::fromJSONList($data->content);
 
@@ -68,15 +68,22 @@ class agent implements ServiceProviderInterface
     private function aggregateByPort(){
         $list = $this->app['agent.connexions'];
         $retour = array();
-
+        $listPort = array_keys(  $this->app['agent.connexions.listPorts'] );
+        $listPos = array_flip( $listPort );
         //list all ports in connexions
         foreach ( $list as $connexion ){
-         //   if( isset( ))
+            if( !isset($retour[$connexion->timestamp]) ){
+                $retour[$connexion->timestamp] = array($connexion->timestamp);
+                foreach ($listPort as $port){
+                    $retour[$connexion->timestamp][] = 0;
+                }
+            }
+            $retour[$connexion->timestamp][ $listPos[$connexion->port] + 1] += $connexion->count;
         }
 
         return array(
-            'label_x' => array_keys(  $this->app['agent.connexions.listPorts'] ),
-            'datas' => $retour
+            'label_x' => $listPort,
+            'datas' => array_values($retour)
         );
     }
 

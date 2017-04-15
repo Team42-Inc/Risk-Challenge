@@ -16,6 +16,7 @@ require_once __DIR__.'/../src/GoogleAuthenticator.php';
 require_once __DIR__.'/../src/user.php';
 require_once __DIR__.'/../src/dashboard.php';
 require_once __DIR__.'/../src/model/HostDetail.php';
+require_once __DIR__.'/../src/model/Connexion.php';
 
 // HTTP
 use Symfony\Component\HttpFoundation\Request;
@@ -66,7 +67,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 $app->register(new login());
 $app->register(new dashboard(), array('dashboard.urlDashBoard' => 'http://10.0.2.57:8080/servers/state'));
 $app->register(new user());
-
+$app->register(new agent());
 
 
 $app->get('/login', function (Request $request) use ($app) {
@@ -104,7 +105,6 @@ $app->get('/dashboard', function (Request $request) use ($app) {
         "country" => "MU"
     )
     );
-    var_dump($app['dashboard.agents']);
     return $app['twig']->render('dashboard.twig', array(
         'hosts' => $app['dashboard.agents'],
         'admins' => $app['admins.listCurrentAdmin']
@@ -113,9 +113,14 @@ $app->get('/dashboard', function (Request $request) use ($app) {
 
 $app->get('/agent/{id}', function ($id) use ($app) {
     // ...
-
+    $app['agent']->getConnexions( $id );
 
     return $app['twig']->render('agent.twig', array(
+        'char_name' => 'connexions',
+        'char_x_name' => '"time"',
+        'char_y_names' => '"' . implode('","', $app['agent.connexions.graph.port']['label_x']) . '"',
+        'char_datas' =>   substr( json_encode($app['agent.connexions.graph.port']['datas']) , 1, -1) ,
+        'char_options' => '',
         'error' => '',
     ));
 });
