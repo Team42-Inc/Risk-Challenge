@@ -41,8 +41,14 @@ class dashboard implements ServiceProviderInterface
         $len = $this->app['dashboard.nb_agent'];
         for( $i = 0; $i < $len ; $i++ ){
             $req = new Request();
-            $req->create($this->url, 'GET', array("host"=>app['dashboard.agent'][$i]['agentname']));
+            $req->create($this->url, 'GET', array("host"=>$this->app['dashboard.agents'][$i]['agentname']));
+            $this->parseHost($i, $req->getContent());
         }
+    }
+
+    private function parseHost($index, $content ){
+        $data = @json_decode($content);
+        $this->app['dashboard.agents'][$index] = \HostDetail::fromJSON($data);
     }
 
     private function getAgentList(){
@@ -50,11 +56,11 @@ class dashboard implements ServiceProviderInterface
         $sql = "SELECT agentname FROM agents";
         $data = $this->app['dbs']['mysql_read']->fetchAll($sql);
         if( isset( $data ) ) {
-            $this->app['dashboard.agent'] = array();
+            $this->app['dashboard.agents'] = array();
             //in case of only one agent
             if (isset($data['agentname'])) {
                 $this->app['dashboard.nb_agent'] = 1;
-                $this->app['dashboard.agent'][0] = array(
+                $this->app['dashboard.agents'][0] = array(
                     'agentname' => $data['agentname']
                 );
                 return true;
@@ -62,7 +68,7 @@ class dashboard implements ServiceProviderInterface
                 $len = count( $data );
                 $this->app['dashboard.nb_agent'] = $len;
                 for($i = 0 ; $i < $len ; $i ++ ){
-                    $this->app['dashboard.agent'][$i] = array(
+                    $this->app['dashboard.agents'][$i] = array(
                         'agentname' => $data[$i]['agentname']
                     );
                 }

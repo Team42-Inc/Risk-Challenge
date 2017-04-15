@@ -75,10 +75,12 @@ $app->post('/login', function(Request $request) use ($app){
 });
 
 $app->get('/dashboard', function () use ($app) {
-    // ...
+    $app['dashboard']->run();
+
+
 
     return $app['twig']->render('dashboard.twig', array(
-        'error' => '',
+        'hosts' => $app['dashboard.agents'],
     ));
 });
 

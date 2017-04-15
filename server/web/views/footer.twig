@@ -1,3 +1,9 @@
-
+<div class="container">
+    <ul>
+    {% for admin in admins %}
+        <li><span>{{ admin.user }}</span><span>{{ admin.ip }}</span><span>{{ admin.country }}</span></li>
+    {% endfor %}
+    </ul>
+</div>
 </body>
 </html>

@@ -1,0 +1,32 @@
+{% include 'header.twig' with {'title': 'dashboard'} %}
+
+<div class="container">
+    <ul>
+    {%  for host in hosts %}
+        <li>
+        {% if host.rate > 90 %}
+            <button type="button" class="btn btn-success">
+        {% elseif host.rate > 70 %}
+            <button type="button" class="btn btn-warning">
+        {% else %}
+            <button type="button" class="btn btn-danger">
+        {% endif %}
+
+                <span>{{host.host}}</span>
+
+                {% if host.trend > 0 %}
+                    <span class="glyphicon glyphicon-arrow-up"></span>
+                {% elseif host.trend < 0 %}
+                    <span class="glyphicon glyphicon-arrow-down"></span>
+                {% else %}
+                    <span class="glyphicon glyphicon-arrow-right"></span>
+                {% endif %}
+
+                <span>{{ host.rate }} %</span>
+            </button>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+
+{% include 'footer.twig' %}

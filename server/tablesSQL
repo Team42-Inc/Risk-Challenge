@@ -34,3 +34,16 @@ metrix_name
 level_warning  (decimal 10,3)
 level_critical (decimal 10,3)
 
+
+//////////////////////////////////////
+table ip2country
+ip_begin (varchar 24)
+ip_end   (varchar 24) 
+ip_begin_int (uint)
+ip_end_int   (uint)
+iso2 (varchar 3)
+country_name (varchar 32)
+
+insert GeoIPCountryWhois.csv
+
+/////////////////////////////////////
