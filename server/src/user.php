@@ -62,16 +62,16 @@ class user implements ServiceProviderInterface
             return false;
         }
         //check if uppercase and lower case
-        if( !preg_match('/[A-Z]+[a-z]+[0-9]+/', $password) ){
+       /* if( !preg_match('/(?=.*[A-Z].*[A-Z])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{9,}/', $password) ){
             $app['user.add.error'] = "password is too week, it needs to have at least an upper case, a lower case AND a digit";
             return false;
         }
-
+        */
         //generate OTP token
         $googleAuth = new PHPGangsta_GoogleAuthenticator();
         $otpToken = $googleAuth->createSecret();
         $app['user.add.otp.secret'] = $otpToken;
-        $app['user.add.otp.QRCodeUrl'] = $googleAuth->getQRCodeGoogleUrl("OASIX ".$username, $otpToken);
+        $app['user.add.otp.QRCodeUrl'] = $googleAuth->getQRCodeGoogleUrl($username."@OASIX", $otpToken);
 
         //insert in base
         $this->app['dbs']['mysql_write']->insert('admins', array(

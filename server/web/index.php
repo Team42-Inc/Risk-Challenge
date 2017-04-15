@@ -90,7 +90,7 @@ $app->post('/login', function(Request $request) use ($app){
 
         //succes
         $cookie = new Cookie("lastusername", $app['login.username'] );
-        $response = $app->redirect('/dashboard');
+        $response = $app->redirect('dashboard');
         $response->headers->setCookie($cookie);
         return $response;
     }
@@ -232,6 +232,12 @@ $app->get('/user-add', function (Request $request) use ($app) {
 })->bind('user-add');
 
 $app->post('/user-add', function (Request $request) use ($app) {
+    $app['admins.listCurrentAdmin'] = array( array(
+        "user" => "default",
+        "ip"   => $request->getClientIp(),
+        "country" => "MU"
+    )
+    );
 
     $username = $request->get('_username');
     if( $app['user']->AddUser($request->get('_username') , $request->get('_password'), $request->get('_mail')  ) ){
@@ -241,7 +247,9 @@ $app->post('/user-add', function (Request $request) use ($app) {
             return $app['twig']->render('user_add_ok.twig', array(
                 'username'  => $username,
                 'urlQRCode' => $app['user.add.otp.QRCodeUrl'],
-                'secret'    => $app['user.add.otp.secret']
+                'secret'    => $app['user.add.otp.secret'],
+                'admins' => $app['admins.listCurrentAdmin'],
+                'page_name' => 'User > Add',
             ));
         }
 
@@ -250,6 +258,8 @@ $app->post('/user-add', function (Request $request) use ($app) {
     return $app['twig']->render('useradd.twig', array(
         'error' => $app['user.add.error'],
         'warningDefaultUser' =>'',
+        'page_name' => 'User > Add',
+        'admins' => $app['admins.listCurrentAdmin'],
         '' =>'',
     ));
 });
