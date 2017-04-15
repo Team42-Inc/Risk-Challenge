@@ -105,8 +105,8 @@ $app->get('/dashboard', function (Request $request) use ($app) {
     );
     var_dump($app['dashboard.agents']);
     return $app['twig']->render('dashboard.twig', array(
-        'hosts' => $app['dashboard.agents'],
-        'admins' => $app['admins.listCurrentAdmin']
+        'hosts' => isset($app['dashboard.agents']) ? $app['dashboard.agents'] : array(),
+        'admins' => isset($app['admins.listCurrentAdmin']) ? $app['admins.listCurrentAdmin'] : array()
     ));
 });
 
