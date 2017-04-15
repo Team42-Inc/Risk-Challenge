@@ -21,7 +21,7 @@ import oasix.middleware.repository.CommandRepository;
 import oasix.middleware.repository.ConnectionStatsRepository;
 import oasix.middleware.repository.ServerStateRepository;
 import oasix.middleware.repository.VulnerabilityStatsRepository;
-import oasix.middleware.service.AggregationService;
+import oasix.middleware.service.AnalysisService;
 
 @RestController
 @RequestMapping("/servers")
@@ -30,7 +30,7 @@ public class ServerStateController {
 	ServerStateRepository serverStateRepository;
 	
 	@Autowired
-	AggregationService aggregationService;
+	AnalysisService aggregationService;
 	
 	@Autowired
 	ConnectionStatsRepository connectionStatsRepository;
@@ -94,7 +94,7 @@ public class ServerStateController {
 		return commandRepository.findByHost(host);
 	}
 	
-	@PostMapping("/analyse")
+	@GetMapping("/analyse")
 	public void analyse(@RequestParam String host){
 		aggregationService.analyse(host, new Date());
 	}

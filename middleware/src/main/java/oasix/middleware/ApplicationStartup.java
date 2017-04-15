@@ -9,7 +9,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-import oasix.middleware.service.AggregationService;
+import oasix.middleware.service.AnalysisService;
 import oasix.middleware.service.Commandservice;
 
 @Component
@@ -18,7 +18,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	AggregationService aggregationService;
+	AnalysisService aggregationService;
 	
 	@Autowired
 	Commandservice commandService;

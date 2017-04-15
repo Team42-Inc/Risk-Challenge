@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import oasix.middleware.model.Connection;
@@ -17,10 +18,14 @@ import oasix.middleware.model.Vulnerability;
 import oasix.middleware.repository.ServerStateRepository;
 
 @Component
-public class AggregationService {
+public class AnalysisService {
 	@Autowired
 	ServerStateRepository serverStateRepository;
 	
+	@Autowired
+	NiktoService niktoService;
+	
+	@Async
 	public void analyse(String host, Date analysisTime){
 		ServerState serverState = createServerState(analysisTime, host);
 		serverStateRepository.save(serverState);
@@ -41,11 +46,14 @@ public class AggregationService {
 		serverState.setSystemInformation(systemInformation);
 		
 		List<Port> openPorts = new ArrayList<>();
-		openPorts.add(new Port(8080,"http"));
-		openPorts.add(new Port(22,"ssh"));
+		openPorts.add(new Port(8080,"TCP", "open", "http"));
+		openPorts.add(new Port(22,"TCP", "open", "ssh"));
 		serverState.setOpenPorts(openPorts);
 		
 		List<Vulnerability> vulnerabilities = new ArrayList<>();
+		
+		vulnerabilities.addAll(niktoService.scan(host));
+		
 		vulnerabilities.add(new Vulnerability("APPLICATION", "MAJEUR", "Sql injection", "Lorem ipsum"));
 		vulnerabilities.add(new Vulnerability("APPLICATION", "MAJEUR", "CSRF", "Lorem ipsum"));
 		vulnerabilities.add(new Vulnerability("ADMINISTRATION", "CRITIQUE", "Root kit", "Lorem ipsum"));
