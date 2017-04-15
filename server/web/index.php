@@ -273,10 +273,10 @@ $app->get('/server/profile', function () use ($app) {
     ));
 });
 
-$app->get('/logout', function () {
+$app->get('/logout', function () use ($app) {
     // ...
-
-    return "";
+    $app['session']->invalidate(0);
+    return  $app->redirect('dashboard');;
 })->bind('logout');
 
 $app->post('/register/agent', function (Request $request) use ($app) {
