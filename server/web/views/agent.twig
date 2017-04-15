@@ -4,42 +4,172 @@
     {% include "sidebarmenu.twig" %}
 {% endblock %}
 
-{% block content %}
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-    google.charts.load('current', {'packages':['corechart','geochart']});
-    var datas = {{ dataraw|raw }};
-    var refChart = {};
-    google.charts.setOnLoadCallback(draw);
-    function draw() {
-        var nbChar = datas.length;
-        var container = document.getElementById('charts');
+{% block navigationhead %}
+    {% include "navigationhead.twig" %}
+{% endblock %}
 
-        for( var i =0; i<nbChar; i++ ){
-            var myGraph = datas[i];
-            var data = google.visualization.arrayToDataTable(
-                myGraph.char_datas
-            );
-            var options = myGraph.char_options;
-            container.innerHTML += '<div class="col-md-6 col-sm-12 col-xs-12"><div class="box"><div id="chart_'+myGraph.char_name+'"></div><div></div>';
-            var item = document.getElementById('chart_'+myGraph.char_name);
-            var chart;
-            switch ( myGraph.char_type ){
-                case 'line':
-                    chart = new google.visualization.LineChart(item);
-                    break;
-                case 'geochart':
-                    chart = new google.visualization.GeoChart(item);
-                    break;
+{% block content %}
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart','geochart']});
+        var datas = {{ dataraw|raw }};
+        var refChart = {};
+        google.charts.setOnLoadCallback(draw);
+        function draw() {
+            var nbChar = datas.length;
+            var container = document.getElementById('charts');
+
+            for( var i =0; i<nbChar; i++ ){
+                var myGraph = datas[i];
+                var data = google.visualization.arrayToDataTable(
+                    myGraph.char_datas
+                );
+                var options = myGraph.char_options;
+                container.innerHTML += '<div class="col-md-6 col-sm-12 col-xs-12"><div class="box"><div id="chart_'+myGraph.char_name+'"></div><div></div>';
+                var item = document.getElementById('chart_'+myGraph.char_name);
+                var chart;
+                switch ( myGraph.char_type ){
+                    case 'line':
+                        chart = new google.visualization.LineChart(item);
+                        break;
+                    case 'geochart':
+                        chart = new google.visualization.GeoChart(item);
+                        break;
+                }
+                if( chart ) {
+                    refChart[myGraph.char_name] = chart;
+                    chart.draw(data, options);
+                }
             }
-            if( chart ) {
-                refChart[myGraph.char_name] = chart;
-                chart.draw(data, options);
-            }
+            return;
         }
-        return;
-    }
-</script>
-<div id="charts" class="row"></div>
+    </script>
+
+    <!-- Rate -->
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-green"><i class="ion-ribbon-b"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Security rate</span>
+                <span class="info-box-number">90<small>%</small></span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+
+    <!-- Vulnerabilities -->
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-red"><i class="ion-alert-circled"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Vulnerabilities</span>
+                <span class="info-box-number">90<small>%</small></span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+
+    <!-- Required updates -->
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-yellow"><i class="ion-alert"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Required updates</span>
+                <span class="info-box-number">90<small>%</small></span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+
+    <!-- System information -->
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-aqua"><i class="ion-information-circled"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">System information</span>
+                    <span class="info-box-number">90<small>%</small></span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div id="charts" class="row"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Vulnerabilities -->
+        <div class="col-md-8 col-sm-12 col-xs-12">
+            <div class="box box-danger">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Vulnerabilities</h3>
+                </div>
+                <!-- /.box-header -->
+                {{ dump(vulnerabilities) }}
+                {% if vulnerabilities %}
+                {%  for vulnerability in vulnerabilities %}
+                <div class="box-body">
+                    <ul class="products-list product-list-in-box">
+                        <li class="item">
+                            <div class="product-info">
+                                <a href="javascript:void(0)" class="product-title">Samsung TV
+                                    <span class="label label-warning pull-right">{{ vulnerability.severity }}</span></a>
+                                <span class="product-description">
+		                  Samsung 32" 1080p 60Hz LED Smart HDTV.
+		                </span>
+                            </div>
+                        </li>
+                        <!-- /.item -->
+                    </ul>
+                </div>
+                {% endfor %}
+                {% endif %}
+                <!-- /.box-body -->
+                <div class="box-footer text-center">
+                </div>
+                <!-- /.box-footer -->
+            </div>
+        </div>
+
+        <!-- Required updates -->
+        <div class="col-md-4 col-sm-12 col-xs-12">
+            <div class="box box-warning">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Required updates</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <ul class="products-list product-list-in-box">
+                        <li class="item">
+                            <div class="product-info">
+                                <a href="javascript:void(0)" class="product-title">Samsung TV
+                                    <span class="label label-warning pull-right">$1800</span></a>
+                                <span class="product-description">
+		                  Samsung 32" 1080p 60Hz LED Smart HDTV.
+		                </span>
+                            </div>
+                        </li>
+                        <!-- /.item -->
+                    </ul>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer text-center">
+                </div>
+                <!-- /.box-footer -->
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

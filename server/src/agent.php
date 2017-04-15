@@ -32,7 +32,18 @@ class agent implements ServiceProviderInterface
         $app['agent.connexions.listPortsSuspicious'] = '';
         $app['agent.connexions.listIpSuspicious'] = '';
         $app['agent.connexions.listPaysSuspicious'] = '';
+        $app['agent.vulnerabilities'] = array();
+        $app['agent.updates'] = array();
         $this->app = $app;
+    }
+
+    public function getVulnerabilities($id) {
+        $vulnerabilities = '"vulnerabilities":[{"type":"PENTEST","severity":"STANDARD","title":" 0 host(s) tested","description":" 0 host(s) tested"},{"type":"APPLICATION","severity":"MAJEUR","title":"Sql injection","description":"Lorem ipsum"},{"type":"APPLICATION","severity":"MAJEUR","title":"CSRF","description":"Lorem ipsum"},{"type":"ADMINISTRATION","severity":"CRITIQUE","title":"Root kit","description":"Lorem ipsum"}]';
+        $this->app['agent.vulnerabilities'] = json_decode($vulnerabilities);
+    }
+
+    public function getRequireUpdates($id) {
+
     }
 
     public function getConnexions( $id ){
