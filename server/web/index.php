@@ -163,11 +163,14 @@ $app->post('/register/agent', function (Request $request) use ($app) {
 
     if( strlen($payload) > 10 && strlen($randomString) > 10 && strlen($signConfirmation) > 10 && strlen($agentid) > 6 ) {
 
-        //TODO: get in base the unique agent private key
-        $private_key = "0@six@g€ntS€cr€t";
+        // get in base the unique agent private key
+        $sql = "SELECT privatekey FROM agents WHERE agentname = ?";
+        $data = $app['dbs']['mysql_read']->fetchAll( $sql, array($agentid ) );
+        $private_key = isset($data['privatekey'])?$data['privatekey']:null; //"0@six@g€ntS€cr€t";
+
         //calculate the sign to compare
         $sign = sha1($agentid . '.|oasix|.' . $payload . '.|oasix|.' . $randomString . '.|oasix|.' . $private_key);
-        if ($sign === $request->get('s', '')) {
+        if ($private_key !== null && $sign === $request->get('s', '')) {
             //authentified
             $agent = json_decode($payload);
 
