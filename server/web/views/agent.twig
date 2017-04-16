@@ -15,7 +15,11 @@
         var datas = {{ dataraw|raw }};
         var refChart = {};
         google.charts.setOnLoadCallback(draw);
+
         function draw() {
+            if( !google.visualization.LineChart || !google.visualization.GeoChart || !google.visualization.Table )
+                google.charts.setOnLoadCallback(draw);
+
             var nbChar = datas.length;
             var container = document.getElementById('charts');
 
@@ -46,6 +50,7 @@
             }
             return;
         }
+
     </script>
 
     <!-- Rate -->
