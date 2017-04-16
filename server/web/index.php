@@ -174,7 +174,7 @@ $app->get('/agent-{id}', function (Request $request, $id) use ($app) {
 
     $dataSuspiciousPays = array(
         'char_name' => 'Suspicious_pays',
-        'char_datas' => $app['agent'] -> getMapGraphSuspiciousData(),
+        'char_datas' => $app['agent'] -> getMapGraphSuspiciousData($id),
         'char_options' => array(
             'title' => 'Suspicious Connexion',
             'colorAxis' => array('colors' => array('#FF0000') ),

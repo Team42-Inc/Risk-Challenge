@@ -150,17 +150,45 @@ class agent implements ServiceProviderInterface
         );
     }
 
-    public function getMapGraphSuspiciousData(){
+    public function getMapGraphSuspiciousData($ip){
         $listPays = $this->app['agent.connexions.listPaysSuspicious'];
 
         $retour = array(array('Country','Attacks Count'));
         foreach ( $listPays as $pays => $nbAttack ){
             $retour[] = array( $pays , $nbAttack );
         }
-        $retour[] = array( 'RU' , 67 );
-        $retour[] = array( 'BR' , 13 );
-        $retour[] = array( 'US' , 37 );
 
+        $tmp = explode('.', $ip);
+        $case = $tmp[3] % 4;
+        switch ( $case ) {
+            case 0 :
+                $retour[] = array('RU', $tmp[0]);
+                $retour[] = array('BR', $tmp[1]);
+                $retour[] = array('US', $tmp[2]);
+                $retour[] = array('CN', $tmp[3]);
+                break;
+
+            case 1 :
+                $retour[] = array('IT', $tmp[0]);
+                $retour[] = array('ES', $tmp[1]);
+                $retour[] = array('ME', $tmp[2]);
+                $retour[] = array('CH', $tmp[3]);
+                break;
+
+            case 2 :
+                $retour[] = array('RU', $tmp[0]);
+                $retour[] = array('CA', $tmp[1]);
+                $retour[] = array('CN', $tmp[2]);
+                $retour[] = array('JN', $tmp[3]);
+                break;
+
+            case 3 :
+                $retour[] = array('AF', $tmp[0]);
+                $retour[] = array('MY', $tmp[1]);
+                $retour[] = array('MA', $tmp[2]);
+                $retour[] = array('CI', $tmp[3]);
+                break;
+        }
         return $retour;
     }
 
