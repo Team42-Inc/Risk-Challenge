@@ -66,7 +66,10 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 ));
 
 $app->register(new login());
-$app->register(new dashboard(), array('dashboard.urlDashBoard' => 'http://10.0.2.57:8080/servers/state'));
+$app->register(new dashboard(), array(
+    'dashboard.urlDashBoard' => 'http://10.0.2.57:8080/servers/state',
+    'dashboard.urlAnalyse' => 'http://10.0.2.57:8080/servers/analyse'
+));
 $app->register(new user());
 $app->register(new agent(), array(
     'agent.urlConnexionsHistory' => 'http://10.0.2.57:8080/servers/metrics/connections',

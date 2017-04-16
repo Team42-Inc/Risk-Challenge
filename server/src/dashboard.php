@@ -103,6 +103,7 @@ class dashboard implements ServiceProviderInterface
                         'host' => $ip,
                         'agent' => 'agent-'.$ip
                     );
+                    @file_get_contents( $this->app['dashboard.urlDashBoard'] .'?host='.$ip );
                    // echo( $ip );
                     /*
                     for( $j=0 ; $j<$len; $j++ ) {
