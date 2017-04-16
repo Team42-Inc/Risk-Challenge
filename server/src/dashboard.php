@@ -80,7 +80,7 @@ class dashboard implements ServiceProviderInterface
     private function getAgentList(){
 
         $this->app['dashboard.agents']= array(
-            array('agent' =>  'agent-202.123.27.113', 'host' =>  '202.123.27.113', 'rate' => 89, 'trend' => 1, 'requiredUpdatesCount'=>4, 'vulnerabilitiesCount'=> 3),
+      //      array('agent' =>  'agent-202.123.27.113', 'host' =>  '202.123.27.113', 'rate' => 89, 'trend' => 1, 'requiredUpdatesCount'=>4, 'vulnerabilitiesCount'=> 3),
             array('agent' =>  'agent-196.27.64.122', 'host' =>  '196.27.64.122', 'rate' => 67, 'trend' => -1, 'requiredUpdatesCount'=>23, 'vulnerabilitiesCount'=> 47),
             array('agent' =>  'agent-10.0.2.85', 'host' =>  '10.0.2.85', 'rate' => 95, 'trend' => 0, 'requiredUpdatesCount'=>2, 'vulnerabilitiesCount'=> 1),
         );
