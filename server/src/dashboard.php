@@ -41,10 +41,12 @@ class dashboard implements ServiceProviderInterface
         }
         $len = $this->app['dashboard.nb_agent'];
         foreach ($this->app['dashboard.agents'] as $key => &$value){
-            $req = new Request();
+         /*   $req = new Request();
             $req->create($this->app['dashboard.urlDashBoard'], 'GET', array("host"=> $value['host']));
             echo( $this->app['dashboard.urlDashBoard'] . $value['host'] . ' => ' . $req->getContent());
-            $this->app['dashboard.agents'] = $this->parseHost($key, $req->getContent());
+          */
+            $this->app['dashboard.agents'] = $this->parseHost($key,
+                @file_get_contents($this->app['dashboard.urlDashBoard'].'?host='.$value['host']));
         }
         $tmp = $this->app['dashboard.agents'];
         usort( $tmp , function ($a , $b ){
