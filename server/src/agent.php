@@ -61,10 +61,12 @@ class agent implements ServiceProviderInterface
     public function getConnexions( $id ){
         //TODO get connexion
 
-        $req = new Request ();
+     /*   $req = new Request ();
         $req->create($this->app['agent.urlConnexionsHistory'], 'GET', array("host"=>$id));
 
-        $datastr = $req->getContent();
+        $datastr = $req->getContent(); */
+        $datastr = file_get_contents( $this->app['agent.urlConnexionsHistory'] .'?host='.$id );
+
         if( !isset($datastr)  || strlen($datastr) < 128 )
             $datastr = file_get_contents(__DIR__.'/../tmpData/http___10_0_2_57_8080_servers_metrics_connections_host_www_govmu_org');
         $data = @json_decode($datastr);
@@ -75,11 +77,12 @@ class agent implements ServiceProviderInterface
         $this->app['agent.connexions.graph.port'] = $this->aggregateByPort();
     }
     public function getRates( $id ){
-
+        /*
         $req = new Request();
         $req->create($this->app['agent.urlRateHistory'], 'GET', array("host"=>$id));
 
-        $datastr = $req->getContent();
+        $datastr = $req->getContent(); */
+        $datastr = file_get_contents( $this->app['agent.urlRateHistory'] .'?host='.$id );
         if( !isset($datastr) || strlen($datastr) < 128)
             $datastr = file_get_contents(__DIR__.'/../tmpData/metric_rates');
 
