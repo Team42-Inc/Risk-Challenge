@@ -23,13 +23,17 @@
             var nbChar = datas.length;
             var container = document.getElementById('charts');
 
+            for( var i =0; i<nbChar; i++ ) {
+                var myGraph = datas[i];
+                container.innerHTML += '<div class="col-md-6 col-sm-12 col-xs-12"><div class="box"><div id="chart_'+myGraph.char_name+'"></div><div></div>';
+            }
             for( var i =0; i<nbChar; i++ ){
                 var myGraph = datas[i];
                 var data = google.visualization.arrayToDataTable(
                     myGraph.char_datas
                 );
                 var options = myGraph.char_options;
-                container.innerHTML += '<div class="col-md-6 col-sm-12 col-xs-12"><div class="box"><div id="chart_'+myGraph.char_name+'"></div><div></div>';
+             //   container.innerHTML += '<div class="col-md-6 col-sm-12 col-xs-12"><div class="box"><div id="chart_'+myGraph.char_name+'"></div><div></div>';
                 var item = document.getElementById('chart_'+myGraph.char_name);
                 var chart;
                 switch ( myGraph.char_type ){
