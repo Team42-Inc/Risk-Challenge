@@ -203,6 +203,8 @@ $app->get('/agent-{id}', function (Request $request, $id) use ($app) {
          'char_datas' => $app['agent']->getOpenPorts() ,
          'char_options' => array(
              'title'     => 'Open Ports',
+             'width'     => '100%',
+             'height'    => '100%'
          ),
          'char_type' => 'table'
      );
