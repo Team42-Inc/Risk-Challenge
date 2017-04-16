@@ -10,6 +10,10 @@ public class RequiredUpdate {
 	public RequiredUpdate(){
 	}
 	
+	public RequiredUpdate(String application){
+		this(application,"","");
+	}
+	
 	public RequiredUpdate(String application, String installedVersion, String currentVersion){
 		this.application = application;
 		this.installedVersion = installedVersion;

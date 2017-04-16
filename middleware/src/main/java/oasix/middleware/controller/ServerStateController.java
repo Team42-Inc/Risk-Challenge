@@ -8,17 +8,23 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import oasix.middleware.model.Command;
 import oasix.middleware.model.ConnectionStats;
+import oasix.middleware.model.Data;
+import oasix.middleware.model.InvalidConnection;
 import oasix.middleware.model.RateStats;
 import oasix.middleware.model.ServerState;
 import oasix.middleware.model.VulnerabilityStats;
 import oasix.middleware.repository.CommandRepository;
 import oasix.middleware.repository.ConnectionStatsRepository;
+import oasix.middleware.repository.DataRepository;
+import oasix.middleware.repository.InvalidConnectionRepository;
 import oasix.middleware.repository.RateStatsRepository;
 import oasix.middleware.repository.ServerStateRepository;
 import oasix.middleware.repository.VulnerabilityStatsRepository;
@@ -37,10 +43,16 @@ public class ServerStateController {
 	ConnectionStatsRepository connectionStatsRepository;
 	
 	@Autowired
+	InvalidConnectionRepository invalidConnectionRepository;
+	
+	@Autowired
 	VulnerabilityStatsRepository vulnerabilityStatsRepository;
 	
 	@Autowired
 	RateStatsRepository rateStatsRepository;
+	
+	@Autowired
+	DataRepository dataRepository;
 	
 	@Autowired
 	CommandRepository commandRepository;
@@ -98,6 +110,11 @@ public class ServerStateController {
 		return rateStatsRepository.findByHost(host);
 	}
 	
+	@GetMapping("/invalidconnections")
+	public Iterable<InvalidConnection> getInvalidConnections(@RequestParam String host){
+		return invalidConnectionRepository.findByHost(host);
+	}
+	
 	@GetMapping("/commands")
 	public Iterable<Command> getCommandHistory(@RequestParam String host){
 		return commandRepository.findAll();
@@ -105,6 +122,14 @@ public class ServerStateController {
 	
 	@GetMapping("/analyse")
 	public void analyse(@RequestParam String host){
-		aggregationService.analyse(host, new Date());
+		aggregationService.analyse(host, new Date(), null);
+	}
+	
+	@PostMapping("/data")
+	public void put(@RequestBody  Data data){
+		Data d = new Data( data.getHost(), new Date(), data.getType(), data.getData(), data.getRootkitWarning(), data.getOpenPorts(), data.getOsInfo(), data.getUpdatesInfo());
+		dataRepository.save(d);
+		
+		aggregationService.analyse(data.getHost(), new Date(), d);
 	}
 }

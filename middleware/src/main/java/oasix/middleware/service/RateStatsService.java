@@ -19,7 +19,7 @@ public class RateStatsService {
 	public void aggregate(String host){
 		List<RateStats> stats = new ArrayList<>();
 		
-		Integer baseRate = 50;
+		Integer baseRate = 65;
 		
 		Date dt = new Date();
 		for(int i=0; i<10; i++){
@@ -29,7 +29,7 @@ public class RateStatsService {
 			dt = c.getTime();
 			
 			int min = 5;
-			int max = 50;
+			int max = 10;
 			float randomNumber = (min + (float) (Math.random() * ((max - min))));
 
 			Integer rate = baseRate + (int)randomNumber;
