@@ -43,6 +43,7 @@ class dashboard implements ServiceProviderInterface
         foreach ($this->app['dashboard.agents'] as $key => &$value){
             $req = new Request();
             $req->create($this->app['dashboard.urlDashBoard'], 'GET', array("host"=> $value['host']));
+            echo( $this->app['dashboard.urlDashBoard'] . $value['host'] . ' => ' . $req->getContent());
             $this->app['dashboard.agents'] = $this->parseHost($key, $req->getContent());
         }
         $tmp = $this->app['dashboard.agents'];
