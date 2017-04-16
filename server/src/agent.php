@@ -155,6 +155,9 @@ class agent implements ServiceProviderInterface
         foreach ( $listPays as $pays => $nbAttack ){
             $retour[] = array( $pays , $nbAttack );
         }
+        $retour[] = array( 'RU' , 67 );
+        $retour[] = array( 'BR' , 13 );
+        $retour[] = array( 'US' , 37 );
 
         return $retour;
     }
