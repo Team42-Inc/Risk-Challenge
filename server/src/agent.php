@@ -179,7 +179,7 @@ class agent implements ServiceProviderInterface
         $list = $this->app['agent.openPorts'];
         $retour =  array( array('Ports', 'Status', 'Protocol', 'Usage' ) );
         foreach ( $list as $port ){
-            $retour[] = array( $port['port'], $port['status'], $port['protocol'], $port['defaultUsage'] );
+            $retour[] = array( ''.$port['port'], $port['status'], $port['protocol'], $port['defaultUsage'] );
         }
 
         return $retour;
