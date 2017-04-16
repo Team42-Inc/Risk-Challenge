@@ -212,8 +212,8 @@ $app->get('/agent-{id}', function (Request $request, $id) use ($app) {
             array(
                 $dataRate,
                 $dataConnexionPort,
+                $dataPorts,
                 $dataSuspiciousPays,
-                $dataPorts
             )
         ),
         'error' => '',
