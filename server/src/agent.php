@@ -39,6 +39,7 @@ class agent implements ServiceProviderInterface
         $this->app['agent.systemInformation.operatingSystem'] = '';
         $this->app['agent.systemInformation.version'] = '';
         $app['agent.rate'] = 0;
+        $app['agent.openPorts'] = array();
         $this->app = $app;
     }
 
@@ -52,6 +53,7 @@ class agent implements ServiceProviderInterface
                 $this->app['agent.rate']                 = $host['rate'];
                 $this->app['agent.systemInformation.operatingSystem']  = $host['systemInformation']['operatingSystem'];
                 $this->app['agent.systemInformation.version']  = $host['systemInformation']['version'];
+                $this->app['agent.openPorts']       = $host['openPorts'];
                 break;
             }
         }
@@ -168,6 +170,16 @@ class agent implements ServiceProviderInterface
         $retour =  array( array('time', 'rates') );
         foreach ( $list as $rate ){
             $retour[] = array( $rate->timestamp, $rate->rate );
+        }
+
+        return $retour;
+    }
+
+    public function getOpenPorts(){
+        $list = $this->app['agent.openPorts'];
+        $retour =  array( array('Ports', 'Status', 'Protocol', 'Usage' ) );
+        foreach ( $list as $port ){
+            $retour[] = array( $port->port, $port->status, $port->protocol, $port->defaultUsage );
         }
 
         return $retour;

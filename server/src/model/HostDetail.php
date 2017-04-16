@@ -22,7 +22,9 @@ class Vulnerability{
 
 class OpenPort{
     public $port;
+    public $protocol;
     public $defaultUsage;
+    public $status;
 }
 
 class RequiredUpdate{
@@ -82,6 +84,8 @@ class HostDetail
             $openport = new OpenPort();
             $openport->port = $port->port;
             $openport->defaultUsage = $port->defaultUsage;
+            $openport->protocol = $port->protocol;
+            $openport->status = $port->status;
             $retour->openPorts[] = $openport;
         }
 

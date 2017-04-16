@@ -198,13 +198,22 @@ $app->get('/agent-{id}', function (Request $request, $id) use ($app) {
         'char_type' => 'line'
     );
 
+     $dataPorts = array(
+         'char_name' => 'ports',
+         'char_datas' => $app['agent']->getOpenPorts() ,
+         'char_options' => array(
+             'title'     => 'Open Ports',
+         ),
+         'char_type' => 'table'
+     );
 
     return $app['twig']->render('agent.twig', array(
         'dataraw' => json_encode(
             array(
                 $dataRate,
                 $dataConnexionPort,
-                $dataSuspiciousPays
+                $dataSuspiciousPays,
+                $dataPorts
             )
         ),
         'error' => '',

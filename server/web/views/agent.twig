@@ -11,7 +11,7 @@
 {% block content %}
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-        google.charts.load('current', {'packages':['corechart','geochart']});
+        google.charts.load('current', {'packages':['corechart','geochart','table']});
         var datas = {{ dataraw|raw }};
         var refChart = {};
         google.charts.setOnLoadCallback(draw);
@@ -34,6 +34,9 @@
                         break;
                     case 'geochart':
                         chart = new google.visualization.GeoChart(item);
+                        break;
+                    case 'table':
+                        chart = new google.visualization.Table(item);
                         break;
                 }
                 if( chart ) {
