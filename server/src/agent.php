@@ -66,7 +66,7 @@ class agent implements ServiceProviderInterface
 
         $datastr = $req->getContent(); */
         $datastr = file_get_contents( $this->app['agent.urlConnexionsHistory'] .'?host='.$id );
-        echo( $datastr );
+       // echo( $datastr );
         if( !isset($datastr)  || strlen($datastr) < 128 )
             $datastr = file_get_contents(__DIR__.'/../tmpData/http___10_0_2_57_8080_servers_metrics_connections_host_www_govmu_org');
         $data = @json_decode($datastr);
