@@ -37,3 +37,9 @@ HASH=$(echo $UUID | sha256sum | cut -d' ' -f1)
 # Push data
 PAYLOAD='{"payload":{"r":"$HASH","a":"$AGENTNAME","s":"$KEY","ip":"$IP","url":"$URL"}}'
 curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "$PAYLOAD" "$SERVER"
+
+# Analysis
+OS=`uname -a`
+lsof -i > output.log
+rkhunter -c -q --rwo
+curl -i -X POST -F "type=rootkit" -F "host=$IP" -F "osInfo=$OS" -F "openPorts=@output.log" -F "rootkitWarning=@/var/log/rkhunter.log" http://10.0.2.57:8080/servers/data
