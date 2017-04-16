@@ -217,6 +217,8 @@ $app->get('/agent-{id}', function (Request $request, $id) use ($app) {
         'vulnerabilitiesCount'  => $app['agent.vulnerabilitiesCount'],
         'requiredUpdate'        => $app['agent.requiredUpdate'],
         'requiredUpdatesCount'  => $app['agent.requiredUpdatesCount'],
+        'OS'                    => $app['agent.systemInformation.operatingSystem'],
+        'versionOS'             => $app['agent.systemInformation.version']
     ));
 })->bind('agent');
 

@@ -36,6 +36,8 @@ class agent implements ServiceProviderInterface
         $app['agent.vulnerabilitiesCount'] = 0;
         $app['agent.requiredUpdate'] = array();
         $app['agent.requiredUpdatesCount'] = 0;
+        $this->app['agent.systemInformation.operatingSystem'] = '';
+        $this->app['agent.systemInformation.version'] = '';
         $app['agent.rate'] = 0;
         $this->app = $app;
     }
@@ -48,7 +50,8 @@ class agent implements ServiceProviderInterface
                 $this->app['agent.requiredUpdate']       = $host['requiredUpdate'];
                 $this->app['agent.requiredUpdatesCount'] = $host['requiredUpdatesCount'];
                 $this->app['agent.rate']                 = $host['rate'];
-
+                $this->app['agent.systemInformation.operatingSystem']  = $host['systemInformation']['operatingSystem'];
+                $this->app['agent.systemInformation.version']  = $host['systemInformation']['version'];
                 break;
             }
         }
