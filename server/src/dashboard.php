@@ -79,32 +79,43 @@ class dashboard implements ServiceProviderInterface
 
     private function getAgentList(){
 
-        $this->app['dashboard.agents']= array(
+     /*   $this->app['dashboard.agents']= array(
       //      array('agent' =>  'agent-202.123.27.113', 'host' =>  '202.123.27.113', 'rate' => 89, 'trend' => 1, 'requiredUpdatesCount'=>4, 'vulnerabilitiesCount'=> 3),
             array('agent' =>  'agent-196.27.64.122', 'host' =>  '196.27.64.122', 'rate' => 67, 'trend' => -1, 'requiredUpdatesCount'=>23, 'vulnerabilitiesCount'=> 47),
             array('agent' =>  'agent-10.0.2.85', 'host' =>  '10.0.2.85', 'rate' => 95, 'trend' => 0, 'requiredUpdatesCount'=>2, 'vulnerabilitiesCount'=> 1),
         );
         $this->app['dashboard.nb_agent'] = count($this->app['dashboard.agents']);
-        return true;
+        return true; */
         //get the list of agents in database
         $sql = "SELECT * FROM agents";
         $data = $this->app['dbs']['mysql_read']->fetchAll($sql);
         if( isset( $data ) ) {
             $this->app['dashboard.agents'] = array();
-            if ( isset( $data[0]['hosts']) ){
-                $len = count( $data );
-                $this->app['dashboard.nb_agent'] = $len;
-                for($i = 0 ; $i < $len ; $i ++ ){
-                    $hosts = str_split( $data[$i]['hosts'], ' ' );
+            $listAgent = array();
+            if ( isset( $data[0]['ip']) ){
+                $i = 0;
+                foreach( $data as $db_data){
+                    $i++;
+                    $hosts = str_split( $db_data['hosts'], ' ' );
                     $len = count( $hosts );
+                    $ip = $db_data['ip'];
+                    $listAgent[] = array(
+                        'host' => $ip,
+                        'agent' => 'agent-'.$ip
+                    );
+                   // echo( $ip );
+                    /*
                     for( $j=0 ; $j<$len; $j++ ) {
                         if( empty($hosts[$j]))
                             continue;
                         $this->app['dashboard.agents'][] = array(
-                            'host' => $hosts[$j],
+                            'host' => $ip,
+                            'agent' => 'agent-'.$ip
                         );
-                    }
+                    }*/
                 }
+                $this->app['dashboard.agents'] = $listAgent;
+                $this->app['dashboard.nb_agent'] = $i;
                 return true;
             }
         }
