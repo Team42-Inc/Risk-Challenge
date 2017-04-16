@@ -142,7 +142,6 @@
     <script type="text/javascript">
         google.charts.load('current', {'packages':['corechart','geochart','table']});
         var datas = {{ dataraw|raw }};
-        var refChart = {};
         google.charts.setOnLoadCallback(initialise);
 
         function initialise(){
@@ -181,7 +180,6 @@
                         break;
                 }
                 if( chart ) {
-                    refChart[myGraph.char_name] = chart;
                     chart.draw(data, options);
                 }
             }
