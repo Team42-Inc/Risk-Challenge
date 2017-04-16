@@ -148,8 +148,7 @@ $app->get('/agent-{id}', function (Request $request, $id) use ($app) {
 
     $app['agent'] -> getConnexions( $id );
     $app['agent'] -> getRates( $id );
-    $app['agent'] -> getVulnerabilities( $id );
-    $app['agent'] -> getRequireUpdates( $id );
+    $app['agent'] -> getHosts( $id );
 
 
     $app['admins.listCurrentAdmin'] = array( array(

@@ -40,26 +40,19 @@ class agent implements ServiceProviderInterface
         $this->app = $app;
     }
 
-    public function getVulnerabilities($id) {
+    public function getHosts($id) {
         foreach ($this->app['dashboard.agents'] as $host ){
             if( $host['host'] == $id ){
-                $this->app['agent.vulnerabilities'] = $host['vulnerabilities'];
+                $this->app['agent.vulnerabilities']      = $host['vulnerabilities'];
                 $this->app['agent.vulnerabilitiesCount'] = $host['vulnerabilitiesCount'];
-
-                break;
-            }
-        }
-
-    }
-
-    public function getRequireUpdates($id) {
-        foreach ($this->app['dashboard.agents'] as $host ){
-            if( $host['host'] == $id ){
-                $this->app['agent.requiredUpdate'] = $host['requiredUpdate'];
+                $this->app['agent.requiredUpdate']       = $host['requiredUpdate'];
                 $this->app['agent.requiredUpdatesCount'] = $host['requiredUpdatesCount'];
+                $this->app['agent.rate']                 = $host['rate'];
+
                 break;
             }
         }
+
     }
 
     public function getConnexions( $id ){
