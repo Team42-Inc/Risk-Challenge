@@ -15,7 +15,14 @@
     <!-- Rate -->
     <div class="col-md-3 col-sm-6 col-xs-12">
         <div class="info-box">
-            <span class="info-box-icon bg-green"><i class="ion-ribbon-b"></i></span>
+            {% if rate > 95 %}
+                <span class="info-box-icon bg-green"><i class="ion-ribbon-b"></i></span>
+            {% elseif rate > 80 %}
+                <span class="info-box-icon bg-yellow"><i class="ion-ribbon-b"></i></span>
+            {% else %}
+                <span class="info-box-icon bg-red"><i class="ion-ribbon-b"></i></span>
+            {% endif %}
+
 
             <div class="info-box-content">
                 <span class="info-box-text">Security rate</span>
@@ -29,7 +36,14 @@
     <!-- Vulnerabilities -->
     <div class="col-md-3 col-sm-6 col-xs-12">
         <div class="info-box">
-            <span class="info-box-icon bg-red"><i class="ion-alert-circled"></i></span>
+
+            {% if vulnerabilitiesCount == 0 %}
+                <span class="info-box-icon bg-green"><i class="ion-alert-circled"></i></span>
+            {% elseif vulnerabilitiesCount < 4 %}
+                <span class="info-box-icon bg-yellow"><i class="ion-alert-circled"></i></span>
+            {% else %}
+                <span class="info-box-icon bg-red"><i class="ion-alert-circled"></i></span>
+            {% endif %}
 
             <div class="info-box-content">
                 <span class="info-box-text">Vulnerabilities</span>
@@ -43,7 +57,13 @@
     <!-- Required updates -->
     <div class="col-md-3 col-sm-6 col-xs-12">
         <div class="info-box">
-            <span class="info-box-icon bg-yellow"><i class="ion-alert"></i></span>
+            {% if requiredUpdatesCount < 5 %}
+                <span class="info-box-icon bg-green"><i class="ion-alert"></i></span>
+            {% elseif requiredUpdatesCount < 20 %}
+                <span class="info-box-icon bg-yellow"><i class="ion-alert"></i></span>
+            {% else %}
+                <span class="info-box-icon bg-red"><i class="ion-alert"></i></span>
+            {% endif %}
 
             <div class="info-box-content">
                 <span class="info-box-text">Required updates</span>
