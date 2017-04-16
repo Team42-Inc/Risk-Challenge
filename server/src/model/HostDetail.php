@@ -75,6 +75,7 @@ class HostDetail
             $vul->type = $vulnerability->type;
             $retour->vulnerabilities[] = $vul;
         }
+        $retour->vulnerabilitiesCount = count($retour->vulnerabilities);
 
         $retour->openPorts = array();
         foreach ($data->openPorts as $port ){
@@ -92,6 +93,7 @@ class HostDetail
             $requiredUpdate->currentVersion = $update->currentVersion;
             $retour->requiredUpdate[] = $requiredUpdate;
         }
+        $retour->requiredUpdatesCount = count($retour->requiredUpdate);
         return $retour;
     }
 }
