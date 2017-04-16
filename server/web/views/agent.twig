@@ -143,7 +143,7 @@
         google.charts.load('current', {'packages':['corechart','geochart','table']});
         var datas = {{ dataraw|raw }};
         var refChart = {};
-        google.charts.setOnLoadCallback(draw);
+        google.charts.setOnLoadCallback(initialise);
 
         function initialise(){
             var container = document.getElementById('charts');
