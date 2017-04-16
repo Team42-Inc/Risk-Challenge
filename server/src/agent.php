@@ -36,8 +36,8 @@ class agent implements ServiceProviderInterface
         $app['agent.vulnerabilitiesCount'] = 0;
         $app['agent.requiredUpdate'] = array();
         $app['agent.requiredUpdatesCount'] = 0;
-        $this->app['agent.systemInformation.operatingSystem'] = '';
-        $this->app['agent.systemInformation.version'] = '';
+        $app['agent.systemInformation.operatingSystem'] = '';
+        $app['agent.systemInformation.version'] = '';
         $app['agent.rate'] = 0;
         $app['agent.openPorts'] = array();
         $this->app = $app;
