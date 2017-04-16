@@ -149,6 +149,7 @@ $app->get('/agent-{id}', function (Request $request, $id) use ($app) {
     $app['agent'] -> getConnexions( $id );
     $app['agent'] -> getRates( $id );
     $app['agent'] -> getVulnerabilities( $id );
+    $app['agent'] -> getRequireUpdates( $id );
 
 
     $app['admins.listCurrentAdmin'] = array( array(
@@ -212,7 +213,11 @@ $app->get('/agent-{id}', function (Request $request, $id) use ($app) {
         'username' => $app['session']->get('user')['username'],
         'admins' => $app['admins.listCurrentAdmin'],
         'hosts' => isset($app['dashboard.agents']) ? $app['dashboard.agents'] : array(),
-        'vulnerabilities' => $app['agent.vulnerabilities'],
+        'rate'                  => $app['agent.rate'],
+        'vulnerabilities'       => $app['agent.vulnerabilities'],
+        'vulnerabilitiesCount'  => $app['agent.vulnerabilitiesCount'],
+        'requiredUpdate'        => $app['agent.requiredUpdate'],
+        'requiredUpdatesCount'  => $app['agent.requiredUpdatesCount'],
     ));
 })->bind('agent');
 

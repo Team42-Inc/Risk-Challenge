@@ -57,7 +57,7 @@ class HostDetail
         $retour->host                   = $data->host;
         $retour->status                 = $data->status;
         $retour->rate                   = $data->rate;
-        $retour->trend                  = $data->trend;
+        $retour->trend                  = $data->trend=="UP"?1:($data->trend=="DOWN"?-1:0);
         $retour->vulnerabilitiesCount   = $data->vulnerabilitiesCount;
         $retour->requiredUpdatesCount   = $data->requiredUpdatesCount;
 

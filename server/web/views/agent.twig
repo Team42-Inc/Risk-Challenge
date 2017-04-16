@@ -52,7 +52,7 @@
 
             <div class="info-box-content">
                 <span class="info-box-text">Security rate</span>
-                <span class="info-box-number">90<small>%</small></span>
+                <span class="info-box-number">{{ rate }}<small>%</small></span>
             </div>
             <!-- /.info-box-content -->
         </div>
@@ -66,7 +66,7 @@
 
             <div class="info-box-content">
                 <span class="info-box-text">Vulnerabilities</span>
-                <span class="info-box-number">90<small>%</small></span>
+                <span class="info-box-number">{{ vulnerabilitiesCount }}</span>
             </div>
             <!-- /.info-box-content -->
         </div>
@@ -80,7 +80,7 @@
 
             <div class="info-box-content">
                 <span class="info-box-text">Required updates</span>
-                <span class="info-box-number">90<small>%</small></span>
+                <span class="info-box-number">{{ requiredUpdatesCount }}</span>
             </div>
             <!-- /.info-box-content -->
         </div>
@@ -117,17 +117,16 @@
                     <h3 class="box-title">Vulnerabilities</h3>
                 </div>
                 <!-- /.box-header -->
-                {{ dump(vulnerabilities) }}
                 {% if vulnerabilities %}
                 {%  for vulnerability in vulnerabilities %}
                 <div class="box-body">
                     <ul class="products-list product-list-in-box">
                         <li class="item">
                             <div class="product-info">
-                                <a href="javascript:void(0)" class="product-title">Samsung TV
+                                <a href="javascript:void(0)" class="product-title">{{ vulnerability.title}}
                                     <span class="label label-warning pull-right">{{ vulnerability.severity }}</span></a>
                                 <span class="product-description">
-		                  Samsung 32" 1080p 60Hz LED Smart HDTV.
+		                  {{ vulnerability.description }}
 		                </span>
                             </div>
                         </li>
@@ -150,20 +149,22 @@
                     <h3 class="box-title">Required updates</h3>
                 </div>
                 <!-- /.box-header -->
+                {% if requiredUpdatesCount > 0 %}
+                {%  for update in requiredUpdate %}
                 <div class="box-body">
                     <ul class="products-list product-list-in-box">
                         <li class="item">
                             <div class="product-info">
-                                <a href="javascript:void(0)" class="product-title">Samsung TV
-                                    <span class="label label-warning pull-right">$1800</span></a>
-                                <span class="product-description">
-		                  Samsung 32" 1080p 60Hz LED Smart HDTV.
-		                </span>
+                                <a href="javascript:void(0)" class="product-title">{{ update.application }}
                             </div>
                         </li>
                         <!-- /.item -->
                     </ul>
                 </div>
+                {% endfor %}
+                {% else %}
+                    Your system is up to date.
+                {% endif %}
                 <!-- /.box-body -->
                 <div class="box-footer text-center">
                 </div>
