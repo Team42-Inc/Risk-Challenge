@@ -148,6 +148,7 @@
         function initialise(){
             var container = document.getElementById('charts');
 
+            var nbChar = datas.length;
             for( var i =0; i<nbChar; i++ ) {
                 var myGraph = datas[i];
                 container.innerHTML += '<div class="col-md-6 col-sm-12 col-xs-12"><div class="box"><div id="chart_'+myGraph.char_name+'"></div><div></div>';
